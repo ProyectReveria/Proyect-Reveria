@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f39d80af9ba443a735e710bcbeaa7, type: 3}
+  m_Name: INPUT STADISTICS
+  m_EditorClassIdentifier: Assembly-CSharp::Movement_Stats
+  Arkhalis_LayerMask: 
+  Ariamis_LayerMask: 
+  MoveThreshold: 0.25
+  MaxWalkSpeed: 5
+  GAcceleration: 7.5
+  GDesaseleration: 7.5
+  Aacceleration: 7.5
+  ADeceleration: 7.5
+  WallJumpMAcceleration: 5
+  WallJumpMDAcceleration: 5
+  MaxRunSpeed: 15
+  Glayer:
+    serializedVersion: 2
+    m_Bits: 8
+  GDRayLength: 0.02
+  HeadDRayLength: 0.02
+  HeadWidth: 0.75
+  WallDetectionRAyLength: 0.125
+  WallDetectRayHeigthMult: 0.9
+  jumpHitgh: 3
+  jumpHitghCompenFactor: 1
+  TimeTillJumpApex: 0.35
+  GraviyOnReleaseMult: 1
+  MaxFallSpeed: 26
+  NumberOfJumpsAllowed: 3
+  RestJumpOnWallS: 1
+  TimeForUpswardC: 0.253
+  ApexTrheshold: 0.95
+  ApexHangTime: 0.1
+  jumpbuffTime: 0.254
+  jumpcyote: 0.065
+  wallSLideSpeed: 15
+  WallSlideDseleration: 0.5
+  WallJumpGravityOnReleaseMult: 1
+  walljumpD: {x: -20, y: 6.5}
+  WallJumpPostBufferTime: 0.125
+  WallJumpGravityMult: 1
+  DashTime: 0.11
+  dashspeed: 40
+  timeBtwDash: 0.225
+  RessetDasthOnWallSlinde: 1
+  numberofDash: 1
+  DeashDiagonalBias: 0.4
+  DashGravityOnRealaseMult: 1
+  DashTimeForUpwardC: 0.27
+  Velocity_Min_Dashing: -50
+  Velocity_Max_Dashing: 50
+  FallSpeed: 50

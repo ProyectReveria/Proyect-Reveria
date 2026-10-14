@@ -3,12 +3,12 @@ using UnityEngine.InputSystem;
 
 public class Input_Manager : MonoBehaviour
 {
-    [SerializeField] public static PlayerInput Player; 
-    [SerializeField] public static Vector2 movement; 
-    [SerializeField] public static bool JumpWpress;
-    [SerializeField] public static bool JumpisHeld;
-    [SerializeField] public static bool JumpwRelased; 
-    [SerializeField] public static bool OnRun; 
+    public static PlayerInput Player; 
+    public static Vector2 movement; 
+    public static bool JumpWpress;
+    public static bool JumpisHeld;
+    public static bool JumpwRelased; 
+    public static bool OnRun; 
     
     private InputAction _MovementHorizontal; 
     private InputAction _Jump; 
@@ -17,9 +17,9 @@ public class Input_Manager : MonoBehaviour
     private void Awake()
     {
         Player = GetComponent<PlayerInput>();
-        _MovementHorizontal = Player.actions["move"];
+        _MovementHorizontal = Player.actions["Move"];
         _Jump = Player.actions["Jump"];
-        _RunAction = Player.actions["Run"];
+        _RunAction = Player.actions["Sprint"];
     }
 
     private void Update()
