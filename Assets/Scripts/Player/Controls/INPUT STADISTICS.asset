@@ -33,7 +33,7 @@ MonoBehaviour:
   WallDetectRayHeigthMult: 0.9
   jumpHitgh: 3
   jumpHitghCompenFactor: 1
-  TimeTillJumpApex: 0.35
+  TimeTillJumpApex: 0.25
   GraviyOnReleaseMult: 1
   MaxFallSpeed: 26
   NumberOfJumpsAllowed: 3
@@ -46,7 +46,7 @@ MonoBehaviour:
   wallSLideSpeed: 15
   WallSlideDseleration: 0.5
   WallJumpGravityOnReleaseMult: 1
-  walljumpD: {x: -20, y: 6.5}
+  walljumpD: {x: -5, y: 3}
   WallJumpPostBufferTime: 0.125
   WallJumpGravityMult: 1
   DashTime: 0.11

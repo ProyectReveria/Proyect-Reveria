@@ -8,11 +8,15 @@ public class Input_Manager : MonoBehaviour
     public static bool JumpWpress;
     public static bool JumpisHeld;
     public static bool JumpwRelased; 
+    public static bool Interact_WasPress;
     public static bool OnRun; 
+    public static bool DashWpress; 
     
     private InputAction _MovementHorizontal; 
     private InputAction _Jump; 
     private InputAction _RunAction;
+    private InputAction _Dash;
+    private InputAction _Interact; 
 
     private void Awake()
     {
@@ -20,6 +24,9 @@ public class Input_Manager : MonoBehaviour
         _MovementHorizontal = Player.actions["Move"];
         _Jump = Player.actions["Jump"];
         _RunAction = Player.actions["Sprint"];
+        _Interact = Player.actions["Interact"];
+        _Dash = Player.actions["Dash"]; 
+        
     }
 
     private void Update()
@@ -31,5 +38,9 @@ public class Input_Manager : MonoBehaviour
         JumpwRelased = _Jump.WasReleasedThisFrame();
         
         OnRun = _RunAction.IsPressed();
+        Interact_WasPress = _Interact.WasPressedThisFrame();
+        DashWpress = _Dash.WasPressedThisFrame(); 
+
+        
     }
 }

@@ -109,6 +109,19 @@ public class Movement_Stats : ScriptableObject
         new Vector2(1,-1).normalized,  //bootom- rigth
     };
     
+    [Header("Slopes")]
+    [Range (10f,80f)]public float MaxSlopeAngle = 50f;
+
+    [Header("Ledge Grab")]
+    public bool LedgeGrabEnabled = true;
+    [Range (0.1f,1f)] public float LedgeDetectRayLength = 0.3f;
+    [Range (0.1f,1f)] public float LedgeCheckHeight = 0.2f;
+    [Range (0.1f,1f)] public float LedgeHangOffset = 0.1f;
+    [Range (0.01f,1f)] public float LedgeHangDistance = 0.02f;
+    [Range (0.1f,1f)] public float LedgeClimbForward = 0.1f;
+    [Range (0.01f,1f)] public float LedgeClimbUp = 0.05f;
+    [Range (0.1f,1f)] public float LedgeRegrabTime = 0.3f;
+    
     //Gravity
     public float Gravity {get; private set;}
     public float InitialJumpVelocity {get; private set;}

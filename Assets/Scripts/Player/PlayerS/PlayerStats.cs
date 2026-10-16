@@ -3,15 +3,23 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Arkhalis & Ariamis Stadistics")]
 public class PlayerStats : ScriptableObject
 {
+    [Header ("Damage by enviorment & Respawn time")]
+
+    [Range (1f,5f)] public float RespawnTime = 1; 
+    [Range (1f,4.5f)] public float LowDamageEnviorment = 1f; 
+    [Range (1f,4.5f)] public float MediumDamageEnviorment = 3f; 
+    [Range (1f,4.5f)] public float ExtremeDamageEnviorment = 4.5f; 
 
     [Header("Both Players Stadistics")]
+
+    //Money esta temporalmente aqui
     [Range (0, 999)] public int Money = 0; 
     [Header("Arkhalis")]
     [Range (5f, 10f)] public float _Arkhalis_HP = 5; 
 
     [Range (1f,5f)] public float _Arkhalis_Melee_Damage = 1f; 
     [Range (0.5f,1f)] public float _Arkhalis_ongRange_Damage = 0.5f; 
-    [Range (10f,20f)] public float _Ariamis_HealthDamageRatio = 10f; 
+    [Range (10f,20f)] public float _Arkhalis_HealthDamageRatio = 10f; 
     [Range (1f,2f)] public float NumberofHealthHealth = 1f; 
 
     [Header("Ariamis")]
