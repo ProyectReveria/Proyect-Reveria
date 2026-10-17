@@ -31,7 +31,7 @@ MonoBehaviour:
   HeadWidth: 0.75
   WallDetectionRAyLength: 0.125
   WallDetectRayHeigthMult: 0.9
-  jumpHitgh: 3
+  jumpHitgh: 2
   jumpHitghCompenFactor: 1
   TimeTillJumpApex: 0.25
   GraviyOnReleaseMult: 1
@@ -60,3 +60,12 @@ MonoBehaviour:
   Velocity_Min_Dashing: -50
   Velocity_Max_Dashing: 50
   FallSpeed: 50
+  MaxSlopeAngle: 50
+  LedgeGrabEnabled: 1
+  LedgeDetectRayLength: 0.3
+  LedgeCheckHeight: 0.2
+  LedgeHangOffset: 0.1
+  LedgeHangDistance: 0.02
+  LedgeClimbForward: 0.1
+  LedgeClimbUp: 0.05
+  LedgeRegrabTime: 0.3

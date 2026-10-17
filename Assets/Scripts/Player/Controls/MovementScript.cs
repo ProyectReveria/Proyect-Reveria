@@ -239,6 +239,8 @@ public class Movement_Manager : MonoBehaviour
             turnC(Minput); 
  
             float Tvelocity = 0; 
+
+            ///<Aqui va una animacion de 'Correr' (si _isGit es true) o de 'Moverse en el aire' (si _isGit es false)
  
             if (Input_Manager.OnRun)
             {
@@ -251,6 +253,8 @@ public class Movement_Manager : MonoBehaviour
         }
         else
         {
+            ///<Aqui va una animacion de 'Idle' (quieto, sin input de movimiento)
+
             _Horizontalvelocity = Mathf.Lerp(_Horizontalvelocity, 0f, Daccel * Time.fixedDeltaTime);
             //RickBody.linearVelocity = new Vector2(_moveV.x, RickBody.linearVelocity.y); //No es necasrio pero esta aqui si ahce falta
         }
@@ -269,6 +273,8 @@ public class Movement_Manager : MonoBehaviour
  
     void Overload_turn(bool T)
     {
+        ///<Aqui va una animacion de 'Giro' (cambio de direccion, opcional)
+
         if (T)
         {
             _IsFacingR = true; 
@@ -330,6 +336,8 @@ public class Movement_Manager : MonoBehaviour
  
         if (_JumpBufferT > 0f && !_isJumping && (_isGit || _CyoteTimer > 0f))
         {
+            ///<Aqui va una animacion de 'Salto' (primer salto desde el suelo o coyote time)
+
             InitialJump(1);
             
  
@@ -343,6 +351,8 @@ public class Movement_Manager : MonoBehaviour
  
         else if (_JumpBufferT > 0f && (_isJumping || _IsFalling || _iswallJumping || _iswalljumpFalling || _isAirDashing || _isdashFastFalling ) && !_istouchingWall && _NumberofJumpUse < Mstas.NumberOfJumpsAllowed)
         {
+            ///<Aqui va una animacion de 'Doble Salto' (salto en el aire)
+
             InitialJump(1);
             _isdashFastFalling = false;
         }
@@ -382,6 +392,8 @@ public class Movement_Manager : MonoBehaviour
             //Gravity on Ascending
             if (VerticalVelocity >= 0f)
             {
+                ///<Aqui va una animacion de 'Subiendo' (el salto va hacia arriba)
+
                 //Apex Controls
                 VerticalVelocity += Mstas.Gravity * Time.fixedDeltaTime;
                 _ApexPoint = Mathf.InverseLerp(Mstas.InitialJumpVelocity, 0f, VerticalVelocity);
@@ -399,6 +411,8 @@ public class Movement_Manager : MonoBehaviour
  
                         if (_TimePastApexThreshold < Mstas.ApexHangTime)
                         {
+                            ///<Aqui va una animacion de 'Punto Maximo del Salto' (apex, flotando)
+
                             VerticalVelocity = 0f;
                         } else
                         {
@@ -418,6 +432,8 @@ public class Movement_Manager : MonoBehaviour
             {
                 if (!_IsFalling)
                 {
+                    ///<Aqui va una animacion de 'Caida' (cae despues de un salto)
+
                     _IsFalling = true;
                 }
             }
@@ -441,6 +457,8 @@ public class Movement_Manager : MonoBehaviour
         {
             if (!_IsFalling)
             {
+                ///<Aqui va una animacion de 'Caida' (cae sin haber saltado, por ejemplo al salir de una plataforma)
+
                 _IsFalling = true;
             }
  
@@ -459,6 +477,8 @@ public class Movement_Manager : MonoBehaviour
     {
         if ((_isJumping || _IsFalling || _iswalljumpFalling || _iswallSlidingFalling || _isWallSliding || _isdashFastFalling) && _isGit && VerticalVelocity <= 0f)
         {
+            ///<Aqui va una animacion de 'Aterrizaje' (toca el suelo despues de saltar, caer, wall jump o dash)
+
             Restart_JumpValues();
             Restart_WallJumpValue();
             StopWallSlidng();
@@ -484,6 +504,8 @@ public class Movement_Manager : MonoBehaviour
         {
             if (!_IsFalling)
             {
+                ///<Aqui va una animacion de 'Caida despues del Dash' (cae al terminar un dash en el aire)
+
                 _IsFalling = true;
             }
  
@@ -512,6 +534,9 @@ public class Movement_Manager : MonoBehaviour
                 }
                 
                 _iswallSlidingFalling = false;
+
+                ///<Aqui va una animacion de 'Agarre en Muro' (empieza a deslizarse por la pared)
+
                 _isWallSliding = true;
  
                 if (Mstas.RessetDasthOnWallSlinde)
@@ -536,6 +561,8 @@ public class Movement_Manager : MonoBehaviour
     {
         if (_isWallSliding) //tambien peude cambiarse para que pase
         {
+            ///<Aqui va el fin de la animacion de 'Agarre en Muro' (deja de deslizarse, pasa a caida o idle)
+
             ++_NumberofJumpUse;
         }
         _isWallSliding = false;
@@ -545,6 +572,8 @@ public class Movement_Manager : MonoBehaviour
     {
         if (_isWallSliding)
         {
+            ///<Aqui va una animacion de 'Deslizarse en Muro' (loop mientras baja por la pared)
+
             VerticalVelocity = Mathf.Lerp(VerticalVelocity, -Mstas.wallSLideSpeed, Mstas.WallSlideDseleration * Time.deltaTime);
         }
     }
@@ -571,6 +600,8 @@ public class Movement_Manager : MonoBehaviour
  
     private void InitiateWallJump()
     {
+        ///<Aqui va una animacion de 'Salto de Pared' (Wall Jump)
+
         if (!_iswallJumping)
         {
             _iswallJumping = true;
@@ -650,6 +681,8 @@ public class Movement_Manager : MonoBehaviour
  
             if (VerticalVelocity < 0f)
             {
+                ///<Aqui va una animacion de 'Caida despues del Salto de Pared'
+
                 _iswalljumpFalling = true;
             }
         }
@@ -665,6 +698,8 @@ public class Movement_Manager : MonoBehaviour
             //Dash
             if (_isGit && _dashOnGroundTimer < 0f && !_isdashing)
             {
+                ///<Aqui va una animacion de 'Dash' (en el suelo)
+
                 Overload_InitiateJump(); 
             }
             //AirDash
@@ -672,6 +707,9 @@ public class Movement_Manager : MonoBehaviour
             else if (!_isGit && !_isdashing && _numberOfDashUsed < Mstas.numberofDash)
             {
                 _isAirDashing = true;
+
+                ///<Aqui va una animacion de 'Dash en el Aire' (Air Dash)
+
                 Overload_InitiateJump();
 
                 //a veces el jugador pierde un salto al hacer un dash desde un muro, aqui esta el arreglo:
@@ -763,6 +801,8 @@ public class Movement_Manager : MonoBehaviour
     {
         if (_isdashing)
         {
+            ///<Aqui va una animacion de 'Dash' (loop mientras dura el dash, usa _dashDirection para la direccion)
+
             _dashTimer += Time.fixedDeltaTime;
             if (_dashTimer >= Mstas.DashTime)
             {
@@ -772,6 +812,8 @@ public class Movement_Manager : MonoBehaviour
                 }
 
                 _Horizontalvelocity = Mathf.Clamp(_Horizontalvelocity, -Mstas.MaxRunSpeed, Mstas.MaxRunSpeed);
+
+                ///<Aqui va el fin de la animacion de 'Dash' (termino el dash, pasa a caida, idle o correr)
 
                 _isAirDashing = false;
                 _isdashing = false;
@@ -831,6 +873,8 @@ public class Movement_Manager : MonoBehaviour
 
         if (_isGrabbingLedge)
         {
+            ///<Aqui va una animacion de 'Colgado del Borde' (loop mientras esta agarrado del borde)
+
             if (Input_Manager.JumpWpress)
             {
                 LedgeClimb();
@@ -870,6 +914,8 @@ public class Movement_Manager : MonoBehaviour
 
         _ledgeCorner = new Vector2(lowerHit.point.x, topHit.point.y);
 
+        ///<Aqui va una animacion de 'Agarrar Borde' (el momento en que se engancha del borde)
+
         _isGrabbingLedge = true;
 
         Restart_JumpValues();
@@ -905,12 +951,16 @@ public class Movement_Manager : MonoBehaviour
             return;
         }
 
+        ///<Aqui va una animacion de 'Subir el Borde' (trepar encima del borde)
+
         TeleportTo(RickBody.position + delta);
     }
 
     //Suelta el borde y activa el tiempo para que no lo vuelva a agarrar de inmediato
     private void ReleaseLedge()
     {
+        ///<Aqui va el fin de la animacion de 'Colgado del Borde' (se suelta del borde, pasa a caida)
+
         _isGrabbingLedge = false;
         _LedgeCooldownT = Mstas.LedgeRegrabTime;
     }
@@ -1077,6 +1127,8 @@ public class Movement_Manager : MonoBehaviour
 
     public void KillMovement()
     {
+        ///<Aqui va una animacion de 'Daño' (se llama al recibir daño, cancela cualquier otra animacion de movimiento)
+
         _Horizontalvelocity = 0f;
         VerticalVelocity = 0f;
         RickBody.linearVelocity = Vector2.zero;
