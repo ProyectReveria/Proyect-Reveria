@@ -12,10 +12,11 @@ public class PlayerStats : ScriptableObject
 
     [Header("Both Players Stadistics")]
 
-    //Money esta temporalmente aqui
+    //?Money esta temporalmente aqui
     [Range (0, 999)] public int Money = 0; 
     [Header("Arkhalis")]
     [Range (5f, 10f)] public float _Arkhalis_HP = 5; 
+    [Range (0f,2f)] public float _Arkhalis_Resistance = 0f;
 
     [Range (1f,5f)] public float _Arkhalis_Melee_Damage = 1f; 
     [Range (0.5f,1f)] public float _Arkhalis_ongRange_Damage = 0.5f; 
@@ -24,6 +25,7 @@ public class PlayerStats : ScriptableObject
 
     [Header("Ariamis")]
     [Range (5f, 10f)] public float _Ariamis_HP = 5; 
+    [Range (0f,2f)] public float _Ariamis_Resistance = 0f;
     [Range (0.5f,3f)] public float _Ariamis_Melee_Damage = 0.5f; 
     [Range (2f,10f)] public float _Ariamis_ongRange_Damage_Charge = 2f; 
     [Range (0.5f, 1f)] public float _Ariamis_ongRange_Damage_Notcharge = 0.5f; 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Non_StableGround
   - Safezone
+  - enemy
   layers:
   - Default
   - TransparentFX
