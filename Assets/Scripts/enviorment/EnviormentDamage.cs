@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using RMC.Player_Interaction.ThePlayerGeneralManager;
 
 public class EnviormentDamage : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class EnviormentDamage : MonoBehaviour
     [SerializeField] private PlayerManager Pmanager; 
     [SerializeField] private GameManager Gmanager; 
     public GameObject player; 
-    public Vector3 spawn = new Vector3 (0,0,0); 
+    public Vector3 spawn = RMC_ThePlayerGeneralManager.RMC_SaveFile_Information.SpawnPoint_Static;
     #endregion
     void OnCollisionEnter2D(Collision2D hit)
     {

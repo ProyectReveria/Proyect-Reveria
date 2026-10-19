@@ -45,6 +45,10 @@ namespace reveria_Stadistics_Structs
 
             [Range(1f,10f)]public float Enemy_Speed; 
             public Enemy_Type Enemy_Type;
+            [Range(0.25f,50f)] public float Enemy_Aceleration;
+            [Range(0.25f,50f)] public float Enemy_DAceleration;
+
+            [Range (0.10f, 0.50f)] public float Enemy_LedgeCheckoofset;
         }
         #endregion
 

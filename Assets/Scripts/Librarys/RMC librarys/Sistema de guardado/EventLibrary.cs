@@ -8,9 +8,12 @@ namespace RMC.SaveFile.EventLibrary
         public static UnityEvent GameSaving = new UnityEvent();
         public static UnityEvent<bool> GameStartLoading = new UnityEvent<bool>();
         public static UnityEvent<bool> GameendendLoading = new UnityEvent<bool>(); 
+        public static UnityEvent<string> GameLoadFailed = new UnityEvent<string>(); 
         public static void Execute_GameSaveLoading() => GameSaving.Invoke(); 
         public static void Execute_GameendstartLoading() => GameStartLoading.Invoke(true);
         public static void Execute_GameendendLoading() => GameendendLoading.Invoke(false);
+
+        public static void Execute_GameLoadFailed(string path) => GameLoadFailed.Invoke(path);
         
     }
 }

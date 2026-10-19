@@ -116,7 +116,7 @@ public class Movement_Manager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Input_Manager.movement);
+
 
         if (Pmanager.PlayerCanMove )
         {

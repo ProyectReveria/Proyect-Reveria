@@ -625,7 +625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveZoneScript
   Player: {fileID: 1673037405}
-  SpawnScript: {fileID: 2099365327}
+  spawn: {x: 0, y: 0}
   Gmanager: {fileID: 1266802722}
 --- !u!66 &621412350
 CompositeCollider2D:
@@ -1217,6 +1217,84 @@ Transform:
   - {fileID: 621412348}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1117528122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1117528123}
+  - component: {fileID: 1117528124}
+  m_Layer: 0
+  m_Name: AtackRange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1117528123
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117528122}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1442217971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1117528124
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117528122}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.011472225, y: 0.10324955}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1.5430193, y: 2.2007618}
+  m_EdgeRadius: 0
 --- !u!1 &1266802718
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1306,7 @@ GameObject:
   - component: {fileID: 1266802720}
   - component: {fileID: 1266802721}
   - component: {fileID: 1266802722}
+  - component: {fileID: 1266802723}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -1284,6 +1363,24 @@ MonoBehaviour:
   _CanInteract: 0
   _CanResiveDamage: 1
   _Iframes: 0
+--- !u!114 &1266802723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266802718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c25a23e76918f14b8e715f0a95db325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RMC.Player_Interaction.ThePlayerGeneralManager.RMC_ThePlayerGeneralManager
+  Arkhalis_HPStatus: 0
+  Ariamis_HPstatus: 0
+  Players:
+  - {fileID: 1673037405}
+  - {fileID: 1673037405}
+  _ScriptableObject_PlayerStats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
 --- !u!1 &1379175958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1350,8 +1447,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.5628524, y: -0.5329957}
-  m_Size: {x: 0.94803524, y: 0.94803524}
+  m_Offset: {x: 1.5628524, y: -0.58715105}
+  m_Size: {x: 0.94803524, y: 1.0563459}
   m_Direction: 0
 --- !u!1 &1442217968
 GameObject:
@@ -1380,13 +1477,13 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1442217968}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.01
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 8732d9dc0d2002a44832dcc9ad157b68, type: 2}
   m_IncludeLayers:
@@ -1398,7 +1495,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &1442217970
 SpriteRenderer:
   serializedVersion: 2
@@ -1473,6 +1570,7 @@ Transform:
   m_Children:
   - {fileID: 1379175959}
   - {fileID: 1575241045}
+  - {fileID: 1117528123}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1442217972
@@ -1491,13 +1589,14 @@ MonoBehaviour:
   bodyCollider: {fileID: 1575241046}
   FeetCollider: {fileID: 1379175960}
   Enemy: {fileID: 1442217968}
-  Enemy_Rickbody: {fileID: 0}
-  Enemy_MoveThreshold: 0.25
+  Enemy_Rickbody: {fileID: 1442217969}
+  Enemy_MoveThreshold: 0.1
   _RigthView: 0
   floor:
     serializedVersion: 2
     m_Bits: 8
-  EnemyTimeMoving: 0.6
+  EnemyTimeMoving: 0.138
+  WallCheckDistance: 0.1
 --- !u!1 &1487317544
 GameObject:
   m_ObjectHideFlags: 0
@@ -3804,6 +3903,7 @@ GameObject:
   - component: {fileID: 1673037411}
   - component: {fileID: 1673037410}
   - component: {fileID: 1673037408}
+  - component: {fileID: 1673037413}
   - component: {fileID: 1673037412}
   m_Layer: 0
   m_Name: player
@@ -3932,6 +4032,19 @@ MonoBehaviour:
   _BodyCoil: {fileID: 1622487450}
   Player: {fileID: 1673037405}
   Pmanager: {fileID: 1266802721}
+--- !u!114 &1673037413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673037405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 566f3a745564f8d44b880a7e12961acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Debug_GameEnviorment
+  player: {fileID: 1673037405}
 --- !u!1 &1799307079
 GameObject:
   m_ObjectHideFlags: 0
