@@ -5,15 +5,9 @@ public class PlayerManager : MonoBehaviour
     [Header ("Player Stats")]
     [SerializeField] private PlayerStats Stats; 
 
-    public float _Arkhalis_Current_PlayerHP;
+    public float Arkhalis_HPStatus;
+    public float Ariamis_HPstatus;
 
-    [Header ("Enable Mecanics")]
-    public bool WallSlideIsActive = false; 
-    public bool WalljumpIsActive = false; 
-
-    public bool MultijumpIsActive = false; 
-
-    public bool DashIsActive = false; 
 
     [Header ("Player Can Move")]
     
@@ -24,11 +18,11 @@ public class PlayerManager : MonoBehaviour
 
     void Awake()
     {
-        _Arkhalis_Current_PlayerHP = Stats._Arkhalis_HP;
+        Arkhalis_HPStatus = Stats._Arkhalis_HP;
     }
 
     public void Restart_HP()
     {
-        _Arkhalis_Current_PlayerHP = Stats._Arkhalis_HP;
+        Arkhalis_HPStatus = Stats._Arkhalis_HP;
     }
 }

@@ -2,6 +2,7 @@ using System.Threading;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using RMC.Player_Interaction.ThePlayerGeneralManager;
 //Pedirle a Cloude deje un mensaje de en que partes hay que conectar las animaciones
 
 //En orden para este script funcionar ocupas: Un Monobehaivor maneje los inputs junto a un Player Input. En el Player Input el Input managerdebe estar hay y este ocupa un script object con las stats. deberian venir ya en el paquete
@@ -29,7 +30,7 @@ public class Movement_Manager : MonoBehaviour
     private Rigidbody2D RickBody; 
 
     public float _Horizontalvelocity {get; private set;}
-    private bool _IsFacingR; 
+    public bool _IsFacingR; 
     //GroundHit
     private RaycastHit2D _Ghit; 
     //heat hit
@@ -127,18 +128,18 @@ public class Movement_Manager : MonoBehaviour
             IsTouchingWall();
 
         }
-
-        if (Pmanager.WalljumpIsActive)
+        
+        if (RMC_ThePlayerGeneralManager.Game_Data_FromSave._WalljumpIsAllow)
         {
             WallJumpCheck();
         }
 
-        if (Pmanager.WallSlideIsActive)
+        if (RMC_ThePlayerGeneralManager.Game_Data_FromSave._WallSlideisAllow)
         {
             WallSlide_Check();
         }
 
-        if (Pmanager.DashIsActive)
+        if (RMC_ThePlayerGeneralManager.Game_Data_FromSave._DashIsActive)
         {
             Dash_Check();
         }
@@ -349,7 +350,7 @@ public class Movement_Manager : MonoBehaviour
  
         //MultipleJump
  
-        else if (_JumpBufferT > 0f && (_isJumping || _IsFalling || _iswallJumping || _iswalljumpFalling || _isAirDashing || _isdashFastFalling ) && !_istouchingWall && _NumberofJumpUse < Mstas.NumberOfJumpsAllowed)
+        else if (_JumpBufferT > 0f && (_isJumping || _IsFalling || _iswallJumping || _iswalljumpFalling || _isAirDashing || _isdashFastFalling ) && !_istouchingWall && _NumberofJumpUse < Mstas.NumberOfJumpsAllowed && RMC_ThePlayerGeneralManager.Game_Data_FromSave._DoubleJumpisAllow == true)
         {
             ///<Aqui va una animacion de 'Doble Salto' (salto en el aire)
 

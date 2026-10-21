@@ -7,16 +7,13 @@ using RMC.Player_Interaction.ThePlayerGeneralManager;
 public class SaveZoneScript : MonoBehaviour
 {
     [Header ("References")]
+    [SerializeField] RMC_ThePlayerGeneralManager GeneralManager; 
      [SerializeField] private GameObject Player; 
-    public Vector2 spawn; 
+
     [SerializeField] private GameManager Gmanager; 
     
     private bool _IsPlayerInside;
 
-    void Awake()
-    {
-        spawn = RMC_ThePlayerGeneralManager.RMC_SaveFile_Information.SpawnPoint;
-    }
     void OnCollisionEnter2D(Collision2D NewSpawnPoint)
     {
         if (NewSpawnPoint.gameObject.CompareTag("Player"))
@@ -40,13 +37,14 @@ public class SaveZoneScript : MonoBehaviour
     void Update()
     {
         OverloadSaveInteract_Function(); 
+        Debug.Log(RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint); 
     }
 
     void OverloadSaveInteract_Function()
     {
         if (Input_Manager.Interact_WasPress && _IsPlayerInside)
         {
-            spawn = Player.transform.position; 
+            RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint = Player.transform.position; 
         }
     }
 }

@@ -11,7 +11,6 @@ public class EnviormentDamage : MonoBehaviour
     [SerializeField] private PlayerManager Pmanager; 
     [SerializeField] private GameManager Gmanager; 
     public GameObject player; 
-    public Vector3 spawn = RMC_ThePlayerGeneralManager.RMC_SaveFile_Information.SpawnPoint_Static;
     #endregion
     void OnCollisionEnter2D(Collision2D hit)
     {
@@ -22,12 +21,12 @@ public class EnviormentDamage : MonoBehaviour
 
             StartCoroutine(Respawn_onStableGround());
 
-            if (Pmanager._Arkhalis_Current_PlayerHP <= 0)
+            if (Pmanager.Arkhalis_HPStatus <= 0)
             {
-                Movement_Manager._LastStableground = spawn;
+                Movement_Manager._LastStableground = RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint;
                 StartCoroutine(Respawn_onStableGround());
                 Pmanager.Restart_HP(); 
-                player.transform.position = spawn; 
+                player.transform.position = RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint; 
             }
             
         }
@@ -38,7 +37,7 @@ public class EnviormentDamage : MonoBehaviour
         Mmanager.KillMovement();
         if (Gmanager._CanResiveDamage)
         {
-            Pmanager._Arkhalis_Current_PlayerHP -= PlayerStats.LowDamageEnviorment; 
+            Pmanager.Arkhalis_HPStatus -= PlayerStats.LowDamageEnviorment; 
             Gmanager._CanResiveDamage = false;
         }
         Pmanager.PlayerCanMove = false;

@@ -11,12 +11,15 @@ public class Input_Manager : MonoBehaviour
     public static bool Interact_WasPress;
     public static bool OnRun; 
     public static bool DashWpress; 
+    public static bool AttackWassPressThisFrame; 
     
     private InputAction _MovementHorizontal; 
     private InputAction _Jump; 
     private InputAction _RunAction;
     private InputAction _Dash;
     private InputAction _Interact; 
+
+    private InputAction _Attack; 
 
     private void Awake()
     {
@@ -26,6 +29,7 @@ public class Input_Manager : MonoBehaviour
         _RunAction = Player.actions["Sprint"];
         _Interact = Player.actions["Interact"];
         _Dash = Player.actions["Dash"]; 
+        _Attack = Player.actions["Attack"];
         
     }
 
@@ -40,6 +44,7 @@ public class Input_Manager : MonoBehaviour
         OnRun = _RunAction.IsPressed();
         Interact_WasPress = _Interact.WasPressedThisFrame();
         DashWpress = _Dash.WasPressedThisFrame(); 
+        AttackWassPressThisFrame = _Attack.WasPressedThisFrame(); 
 
         
     }

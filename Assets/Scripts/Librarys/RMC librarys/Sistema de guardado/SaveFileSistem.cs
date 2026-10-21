@@ -26,16 +26,27 @@ namespace RMC.SaveFile.SaveSerialice
     #region  Path_List
     class Path_List
     {
-        public static readonly string RotPath = Application.persistentDataPath;
+        public static string RotPath;
         
         //directory 
         public static readonly string DirectoryName = "SaveFiles"; 
-        public static readonly string Directory_PathSaveFile = Path.Combine(RotPath,DirectoryName);
+        public static string Directory_PathSaveFile;
 
         //SaveFile
         public static string GustomName = "SaveFile";  //Recordar implementar para poner los gustom name y para poner la opcion de si sobre- escribir o no.
+        public static string DefaultName = "SaveFile";
+        public static string DefaultSaveFile_Path;
 
-        public static string SaveFile_Path ;
+        public static string SaveFile_Path;
+
+        public static void InitiatePath()
+        {
+            RotPath = Application.persistentDataPath;
+            Directory_PathSaveFile = Path.Combine(RotPath, DirectoryName);
+            DefaultSaveFile_Path = Path.Combine(Directory_PathSaveFile, DefaultName);
+            SaveFile_Path = Path.Combine(Directory_PathSaveFile, GustomName);
+        }
+
 
 
     }
@@ -163,6 +174,7 @@ namespace RMC.SaveFile.SaveSerialice
                     }
 
                     FileGen_Methods.Create_files(Path_List.GustomName);
+                    Path_List.SaveFile_Path = Path.Combine(Path_List.Directory_PathSaveFile,Path_List.GustomName); 
                 }
 
                 if (!Directory.Exists(Path_List.Directory_PathSaveFile))
@@ -242,7 +254,7 @@ namespace RMC.SaveFile.SaveSerialice
 
                 saved = true;
 
-                RMC_ThePlayerGeneralManager.RMC_SaveFile_Information._SafeFilePath_Static = Path_List.SaveFile_Path;
+                RMC_ThePlayerGeneralManager.DefaulPath = Path_List.SaveFile_Path;
             }
             catch (Exception FailOnSave)
             {
@@ -454,7 +466,7 @@ namespace RMC.SaveFile.SaveSerialice
 
             try
             {
-                string[] FilesInDirectory = Directory.GetFiles(Path_List.Directory_PathSaveFile, ".json");
+                string[] FilesInDirectory = Directory.GetFiles(Path_List.Directory_PathSaveFile, "*.json");
 
                 // Se lee la fecha una sola vez por archivo, en lugar de en cada comparacion del sort.
                 DateTime[] WriteTimes = new DateTime[FilesInDirectory.Length];

@@ -5,6 +5,13 @@ namespace reveria_Stadistics_Structs
     public class StructureLibrary 
     {
         #region  Enums
+
+        public enum _EnemyStatus
+        {
+            alive, 
+            death, 
+            stun,
+        }
         public enum Weapond_Name
         {
             /// !<Sobre los tier>
@@ -49,6 +56,7 @@ namespace reveria_Stadistics_Structs
             [Range(0.25f,50f)] public float Enemy_DAceleration;
 
             [Range (0.10f, 0.50f)] public float Enemy_LedgeCheckoofset;
+            public _EnemyStatus Enemy_Status; 
         }
         #endregion
 

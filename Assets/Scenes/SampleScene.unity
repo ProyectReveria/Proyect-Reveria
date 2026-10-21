@@ -624,8 +624,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e8225121c920054ea54f66fd7e0bfb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveZoneScript
+  GeneralManager: {fileID: 0}
   Player: {fileID: 1673037405}
-  spawn: {x: 0, y: 0}
   Gmanager: {fileID: 1266802722}
 --- !u!66 &621412350
 CompositeCollider2D:
@@ -1279,7 +1279,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1342,11 +1342,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   Stats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
-  _Arkhalis_Current_PlayerHP: 0
-  WallSlideIsActive: 1
-  WalljumpIsActive: 1
-  MultijumpIsActive: 1
-  DashIsActive: 1
+  Arkhalis_HPStatus: 0
+  Ariamis_HPstatus: 0
   PlayerCanMove: 1
 --- !u!114 &1266802722
 MonoBehaviour:
@@ -1375,11 +1372,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c25a23e76918f14b8e715f0a95db325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RMC.Player_Interaction.ThePlayerGeneralManager.RMC_ThePlayerGeneralManager
-  Arkhalis_HPStatus: 0
-  Ariamis_HPstatus: 0
   Players:
   - {fileID: 1673037405}
   - {fileID: 1673037405}
+  Pmanager: {fileID: 1266802721}
   _ScriptableObject_PlayerStats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
 --- !u!1 &1379175958
 GameObject:
@@ -1597,6 +1593,7 @@ MonoBehaviour:
     m_Bits: 8
   EnemyTimeMoving: 0.138
   WallCheckDistance: 0.1
+  HPStatus_Enemy: 0
 --- !u!1 &1487317544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1734,6 +1731,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487317544}
   m_CullTransparentMesh: 1
+--- !u!1 &1495794479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1495794480}
+  - component: {fileID: 1495794481}
+  m_Layer: 0
+  m_Name: AttackHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1495794480
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495794479}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1673037411}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &1495794481
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495794479}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.69816744, y: -0.11405008}
+  m_Size: {x: 0.6963705, y: 1.7439781}
+  m_Direction: 0
 --- !u!1 &1539479644
 GameObject:
   m_ObjectHideFlags: 0
@@ -4013,6 +4079,7 @@ Transform:
   m_Children:
   - {fileID: 1622487449}
   - {fileID: 1612712759}
+  - {fileID: 1495794480}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1673037412
@@ -4032,6 +4099,7 @@ MonoBehaviour:
   _BodyCoil: {fileID: 1622487450}
   Player: {fileID: 1673037405}
   Pmanager: {fileID: 1266802721}
+  _IsFacingR: 0
 --- !u!114 &1673037413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28464,7 +28532,6 @@ MonoBehaviour:
   Pmanager: {fileID: 1266802721}
   Gmanager: {fileID: 1266802722}
   player: {fileID: 1673037405}
-  spawn: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

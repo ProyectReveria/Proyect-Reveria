@@ -30,7 +30,7 @@ public class ArkhalisUserInterface : MonoBehaviour
     #region  UI_Arkhalis
     void Overload_HP_UI_Function()
     {
-        Hp_UIArkhalis.text = $"Arkhalis HP: {Pmanajer._Arkhalis_Current_PlayerHP}|{PlayerStats._Arkhalis_HP}"; 
+        Hp_UIArkhalis.text = $"Arkhalis HP: {Pmanajer.Arkhalis_HPStatus}|{PlayerStats._Arkhalis_HP}"; 
     }
 
     void Overload_E_UI_Function()
