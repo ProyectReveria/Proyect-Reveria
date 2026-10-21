@@ -24,6 +24,10 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Enemy_interac
     protected float HorizontalSpeed = 0f; 
     protected float VerticalVelocity = 0f;
 
+    protected float aceleration; 
+    protected float _edgedetection;
+    protected float _velocity;
+
 
     //Si el enemigo esta en el piso o no.
     protected bool _Istouchingthefloor;
@@ -33,10 +37,19 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Enemy_interac
 
     protected virtual void Awake()
     {
-        //NO METAS ESTO EN EL FIXED UPDATE NO NO ES BUENA IDEA Y NO NO FUNCIONA
+        //DO NOT PUT THIS ON FIXED UPDATE
+        UpdateData();
+
+    }
+
+    protected virtual void UpdateData()
+    {
+        //DO NOT PUT THIS ON FIXED UPDATE
         Enemy_Position = Enemy.transform.position; 
-        //estas variables en enemigo como HPstatus deben ser iguales siempre
         HPStatus_Enemy = Enemy_Stats.T_U_P_C.EnemyHP; 
+        aceleration = Enemy_Stats.T_U_P_C.Enemy_Aceleration;
+        _edgedetection = Enemy_Stats.T_U_P_C.Enemy_LedgeCheckoofset;
+        _velocity = Enemy_Stats.T_U_P_C.Enemy_Speed;
     }
 
     protected virtual void FixedUpdate()
@@ -51,7 +64,7 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Enemy_interac
     public float HPStatus_Enemy;
    protected virtual void overload_MovementFunction()
     {
-        float Velocity = Enemy_Stats.T_U_P_C.Enemy_Speed ;
+        
         float Direction = _RigthView ? 1f : -1f;
 
         VerticalVelocity = Enemy_Rickbody.linearVelocity.y;
@@ -66,7 +79,7 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Enemy_interac
         if (_Istouchingthefloor)
         {
             //Estos son cajas de Raycast, esot significa que el Collider en si dependede ellas para detectar cosas
-            Vector2 FrontFoot = new Vector2(feet.center.x + Direction * (feet.extents.x + Enemy_Stats.T_U_P_C.Enemy_LedgeCheckoofset), feet.min.y + 0.05f);
+            Vector2 FrontFoot = new Vector2(feet.center.x + Direction * (feet.extents.x + _edgedetection), feet.min.y + 0.05f);
             RaycastHit2D LedgeHit = Physics2D.Raycast(FrontFoot, Vector2.down, 0.2f, floor);
 
             Vector2 FrontBody = new Vector2(bodyCollider.bounds.center.x + Direction * bodyCollider.bounds.extents.x, bodyCollider.bounds.center.y);
@@ -80,7 +93,7 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Enemy_interac
                 return;
             }
             //Esta formula es casi unviersal entre enemigos
-            HorizontalSpeed = Mathf.Lerp(HorizontalSpeed, Velocity, Enemy_Stats.T_U_P_C.Enemy_Aceleration * Time.fixedDeltaTime);
+            HorizontalSpeed = Mathf.Lerp(HorizontalSpeed, _velocity, aceleration * Time.fixedDeltaTime);
         }
         else
         {
