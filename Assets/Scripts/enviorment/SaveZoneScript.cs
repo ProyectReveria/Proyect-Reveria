@@ -37,7 +37,6 @@ public class SaveZoneScript : MonoBehaviour
     void Update()
     {
         OverloadSaveInteract_Function(); 
-        Debug.Log(RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint); 
     }
 
     void OverloadSaveInteract_Function()

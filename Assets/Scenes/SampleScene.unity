@@ -1560,7 +1560,7 @@ Transform:
   m_GameObject: {fileID: 1442217968}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: 19, z: 0}
+  m_LocalPosition: {x: 3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1741,6 +1741,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1495794480}
   - component: {fileID: 1495794481}
+  - component: {fileID: 1495794482}
   m_Layer: 0
   m_Name: AttackHitbox
   m_TagString: Untagged
@@ -1800,6 +1801,24 @@ CapsuleCollider2D:
   m_Offset: {x: 0.69816744, y: -0.11405008}
   m_Size: {x: 0.6963705, y: 1.7439781}
   m_Direction: 0
+--- !u!114 &1495794482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495794479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1423607acd717b44187566f31c144347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackScript
+  Mmanager: {fileID: 1673037412}
+  Pstats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
+  PlayerHitbox: {fileID: 1622487450}
+  AttackHB: {fileID: 1495794481}
+  Imanager: {fileID: 746028485}
+  Attack_Raysice: 1
 --- !u!1 &1539479644
 GameObject:
   m_ObjectHideFlags: 0

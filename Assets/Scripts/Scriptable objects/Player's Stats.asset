@@ -12,13 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b8440a05271954d8bd027fa3e47536, type: 3}
   m_Name: Player's Stats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  RespawnTime: 1
+  LowDamageEnviorment: 1
+  MediumDamageEnviorment: 3
+  ExtremeDamageEnviorment: 4.5
   Money: 0
-  _Arkhalis_HP: 5
+  _Arkhalis_HP: 10
+  _Arkhalis_Resistance: 0
   _Arkhalis_Melee_Damage: 1
   _Arkhalis_ongRange_Damage: 0.5
-  _Ariamis_HealthDamageRatio: 10
+  _Arkhalis_HealthDamageRatio: 10
   NumberofHealthHealth: 1
   _Ariamis_HP: 5
+  _Ariamis_Resistance: 0
   _Ariamis_Melee_Damage: 0.5
   _Ariamis_ongRange_Damage_Charge: 2
   _Ariamis_ongRange_Damage_Notcharge: 0.5

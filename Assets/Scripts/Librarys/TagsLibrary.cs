@@ -6,12 +6,12 @@ namespace C_Reveria.TagsLibrary
     {
         public static string[] Enemy_Array =
         {
-          "Enemy"
+          "enemy"
         };
 
         public static string[] scripts =
         {
-          "Test Enemy"  
+          "TestEnemy"  
         };
 
         

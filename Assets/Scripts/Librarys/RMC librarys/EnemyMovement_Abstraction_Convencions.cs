@@ -123,7 +123,14 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Enemy_interac
     public void _EnemyReciveDamage_Contract(float Damage)
     {
         HPStatus_Enemy -= Damage;
+
+        if (HPStatus_Enemy >= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
+
+    
     #endregion
 
 }

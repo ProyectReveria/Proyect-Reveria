@@ -15,16 +15,34 @@ public class AttackScript : MonoBehaviour
     private bool _HitEnemy;
     private Component Enemy_stats;
     [Range(0.25f,1f), SerializeField]private float Attack_Raysice = 0.25f;
+    private         Vector2 Direction;
 
-    
+    void Update()
+    {
+        if (Input_Manager.AttackWassPressThisFrame)
+        {
+            _Attackenemy();
+        }
+    }
+
+
 
     void _Attackenemy()
     {
 
         Vector2 Attack_Ray = new Vector2(AttackHB.bounds.center.x,PlayerHitbox.bounds.center.y);
         Vector2 RangeAttack_Ray_Higth = new Vector2 (AttackHB.bounds.size.x,Attack_Raysice);
-        AttackCast = Physics2D.BoxCast(Attack_Ray,RangeAttack_Ray_Higth,0f, Vector2.right,Attack_Raysice);
+        AttackCast = Physics2D.BoxCast(Attack_Ray,RangeAttack_Ray_Higth,0f, Direction,Attack_Raysice);
+
+        if (!Mmanager._IsFacingR)
+        {
+            Direction = Vector2.right;
+        } else
+        {
+            Direction = Vector2.left;
+        }
         foreach (string enemy in System_Tags.Enemy_Array ){
+            Debug.Log(enemy);
             if (!AttackCast.transform.CompareTag(enemy))
             {
             continue;
@@ -56,6 +74,7 @@ public class AttackScript : MonoBehaviour
                 return;
             }else
             {
+                Debug.Log ("i hit enemy");
                 Enemy_Convencion._EnemyReciveDamage_Contract(Pstats._Arkhalis_Melee_Damage);
             }
         }
