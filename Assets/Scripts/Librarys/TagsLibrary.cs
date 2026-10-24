@@ -4,6 +4,7 @@ namespace C_Reveria.TagsLibrary
 {
     public class System_Tags
     {
+        public static string PlayerTag = "Player"; 
         public static string[] Enemy_Array =
         {
           "enemy"
@@ -13,6 +14,11 @@ namespace C_Reveria.TagsLibrary
         {
           "TestEnemy"  
         };
+
+        public static string[] Player_Scripts =
+    {
+      "Player_Universal_Convencions"
+    }; 
 
         
     }

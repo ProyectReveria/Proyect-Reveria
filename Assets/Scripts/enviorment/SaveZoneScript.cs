@@ -10,7 +10,8 @@ public class SaveZoneScript : MonoBehaviour
     [SerializeField] RMC_ThePlayerGeneralManager GeneralManager; 
      [SerializeField] private GameObject Player; 
 
-    [SerializeField] private GameManager Gmanager; 
+     [SerializeField] private PlayerManager playerManager;
+
     
     private bool _IsPlayerInside;
 
@@ -18,7 +19,7 @@ public class SaveZoneScript : MonoBehaviour
     {
         if (NewSpawnPoint.gameObject.CompareTag("Player"))
         {
-            Gmanager._CanInteract = true; 
+            playerManager._CanInteract = true; 
             _IsPlayerInside = true;
         } 
 
@@ -28,7 +29,7 @@ public class SaveZoneScript : MonoBehaviour
     {
         if (NewSpawnPoint.gameObject.CompareTag("Player"))
         {
-            Gmanager._CanInteract = false;
+            playerManager._CanInteract = false;
             _IsPlayerInside = false;
         }
 

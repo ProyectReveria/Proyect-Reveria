@@ -57,6 +57,8 @@ namespace reveria_Stadistics_Structs
 
             [Range (0.10f, 0.50f)] public float Enemy_LedgeCheckoofset;
             public _EnemyStatus Enemy_Status; 
+            [Range(1f,5f)] public float EnemyDetectionRange; 
+            [Range (1f,5f)] public float TimeBetweenAttacks; 
         }
         #endregion
 

@@ -7,6 +7,8 @@ TagManager:
   - Non_StableGround
   - Safezone
   - enemy
+  - Arkhalis_Player
+  - Arimais_Player
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - UI
   - DamageEnviorment
   - nonStableGround
-  - 
-  - 
+  - Arkhalis_Playr
+  - Ariamis_Player
   - 
   - 
   - 

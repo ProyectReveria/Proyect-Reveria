@@ -13,10 +13,12 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
     [DefaultExecutionOrder(-7777777)]
     public class RMC_ThePlayerGeneralManager : MonoBehaviour
     {   
-        #region  Serializeble Data and Update Serializable DAta
+
         [Serializable]
         public class RMC_SaveFile_Information 
         {
+            [Header ("What character is active")]
+            
 
             [Header ("Ignore")]
 
@@ -35,7 +37,6 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
             //Redundantemente necesario
 
         }
-        #endregion
 
 
         #region  Variables for Reference

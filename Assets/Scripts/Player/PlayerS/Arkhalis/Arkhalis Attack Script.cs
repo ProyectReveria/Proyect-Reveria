@@ -4,7 +4,7 @@ using C_Reveria.TagsLibrary;
 public class AttackScript : MonoBehaviour
 {
     [Header("Referencias")]
-    [SerializeField] private Movement_Manager Mmanager; 
+    [SerializeField] private Arkhalis_Movement_Manager Mmanager; 
     [SerializeField] private PlayerStats Pstats; 
     [SerializeField] private Collider2D PlayerHitbox; 
     [SerializeField] private Collider2D AttackHB; 
@@ -68,7 +68,7 @@ public class AttackScript : MonoBehaviour
             return;
         } else
         {
-           Enemy_interaction_Library Enemy_Convencion = Enemy_stats as Enemy_interaction_Library; 
+           Reveria_Contract_Broker Enemy_Convencion = Enemy_stats as Reveria_Contract_Broker; 
            if (Enemy_Convencion == null)
             {
                 return;

@@ -10,104 +10,110 @@ using RMC.Player_Interaction.ThePlayerGeneralManager;
 // Base On: https://www.youtube.com/watch?v=zHSWG05byEc 
 
 //La gravedad en este codigo es manual al igual que las physicas. para que se tome en cuenta
-public class Movement_Manager : MonoBehaviour
-{
+public abstract class Movement_Manager_Abstract : MonoBehaviour
+{   
+    [Header ("SelfReference")]
+    [SerializeField] protected Arkhalis_Movement_Manager BloodMovementManager;
+    [SerializeField] protected Ariamis_Movement_Manager MagicMovmentManger;
 
-    public static bool _isDashActive;
-    public static bool _isWalljumpActive; 
+    [Header ("Camara References")]
+
+    [SerializeField] protected Camera BloodCamara;
+    [SerializeField] protected Camera MagicCamara;
+
     // _G = Ground 
     #region  References
     [Header ("References")]
 
-    public Movement_Stats Mstas;
-    [SerializeField] private Collider2D _FeetCoil;
-    [SerializeField] private Collider2D _BodyCoil; 
+    public C_ReveriaMovementStats Mstas;
+    [SerializeField] protected Collider2D _FeetCoil;
+    [SerializeField] protected Collider2D _BodyCoil; 
 
-    [SerializeField] private GameObject Player; 
-    [SerializeField] private PlayerManager Pmanager; 
+    [SerializeField] protected GameObject Player; 
+    [SerializeField] protected PlayerManager Pmanager; 
     
 
-    private Rigidbody2D RickBody; 
+    protected Rigidbody2D RickBody; 
 
     public float _Horizontalvelocity {get; private set;}
     public bool _IsFacingR; 
     //GroundHit
-    private RaycastHit2D _Ghit; 
+    protected RaycastHit2D _Ghit; 
     //heat hit
-    private RaycastHit2D _HeadHit; 
+    protected RaycastHit2D _HeadHit; 
     //wallhit
-    private RaycastHit2D _wallhit; 
-    private RaycastHit2D _lastwallhit; 
+    protected RaycastHit2D _wallhit; 
+    protected RaycastHit2D _lastwallhit; 
 
-    private bool _isGit; 
-    private bool _IbumHead;
-    private ContactPoint2D[] _floorContacts = new ContactPoint2D[8];
+    protected bool _isGit; 
+    protected bool _IbumHead;
+    protected ContactPoint2D[] _floorContacts = new ContactPoint2D[8];
 
     //Jump Variables
     
 
     public float VerticalVelocity {get; private set;}
-    private bool _isJumping; 
-    private bool _IsFastFalling; 
-    private bool _IsFalling; 
-    private float _FastFallTime; 
-    private float _FastFallRelSpeed; 
-    private int _NumberofJumpUse;
+    protected bool _isJumping; 
+    protected bool _IsFastFalling; 
+    protected bool _IsFalling; 
+    protected float _FastFallTime; 
+    protected float _FastFallRelSpeed; 
+    protected int _NumberofJumpUse;
 
     
 
     //Apex
-    private float _ApexPoint; 
-    private float _TimePastApexThreshold; 
-    private bool _IsPastApexThreshold;
+    protected float _ApexPoint; 
+    protected float _TimePastApexThreshold; 
+    protected bool _IsPastApexThreshold;
 
     //JumpBuffer V
-    private float _JumpBufferT; 
-    private bool _JumpRduringBuffer; 
+    protected float _JumpBufferT; 
+    protected bool _JumpRduringBuffer; 
 
     //cyotetime
-    private float _CyoteTimer; 
+    protected float _CyoteTimer; 
 
     //wall slide
-    private bool _isWallSliding; 
-    private bool _iswallSlidingFalling; 
-    private bool _istouchingWall; 
+    protected bool _isWallSliding; 
+    protected bool _iswallSlidingFalling; 
+    protected bool _istouchingWall; 
 
     //walljump 
-    private bool _useWallJumpMstats;
-    private bool _iswallJumping; 
-    private float _walljumpT; 
-    private bool _iswalljumpFalling; 
+    protected bool _useWallJumpMstats;
+    protected bool _iswallJumping; 
+    protected float _walljumpT; 
+    protected bool _iswalljumpFalling; 
 
-    private float _walljumpPostBufferT;
-    private int _walljumpDir;
+    protected float _walljumpPostBufferT;
+    protected int _walljumpDir;
 
     //dash vars
 
-    private bool _isdashing;
-    private bool _isAirDashing; 
-    private float _dashTimer; 
-    private float _dashOnGroundTimer; 
-    private int _numberOfDashUsed; 
-    private Vector2 _dashDirection; 
-    private bool _isdashFastFalling; 
-    private float _DashFastFallTime; 
-    private float _dashFastFallRelaeseSpeed; 
+    protected bool _isdashing;
+    protected bool _isAirDashing; 
+    protected float _dashTimer; 
+    protected float _dashOnGroundTimer; 
+    protected int _numberOfDashUsed; 
+    protected Vector2 _dashDirection; 
+    protected bool _isdashFastFalling; 
+    protected float _DashFastFallTime; 
+    protected float _dashFastFallRelaeseSpeed; 
 
     //NonStableGround
 
-    private bool _IsonStableGround; 
-    public static Vector2 _LastStableground {get; set;}
+    protected bool _IsonStableGround; 
+    public  Vector2 _LastStableground {get; set;}
 
     //ledge grab: esta colgado del borde, esquina del borde agarrado y tiempo para volver a agarrar
-    private bool _isGrabbingLedge;
-    private Vector2 _ledgeCorner;
-    private float _LedgeCooldownT;
+    protected bool _isGrabbingLedge;
+    protected Vector2 _ledgeCorner;
+    protected float _LedgeCooldownT;
 
     #endregion
 
     #region  Unity Update Interfas
-        private void Awake()
+        protected virtual void Awake()
     {
         _IsFacingR = true; 
         RickBody = GetComponent<Rigidbody2D>();
@@ -115,7 +121,7 @@ public class Movement_Manager : MonoBehaviour
 
   
 
-    private void Update()
+    protected virtual void Update()
     {
 
 
@@ -154,7 +160,7 @@ public class Movement_Manager : MonoBehaviour
                    
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         
 
@@ -198,7 +204,7 @@ public class Movement_Manager : MonoBehaviour
 
     #region  Movement
  
-    private void ApplyVelocity()
+    protected virtual void ApplyVelocity()
     {
         //mantiene al jugador quieto mientras esta colgado de un borde
         if (_isGrabbingLedge)
@@ -231,7 +237,7 @@ public class Movement_Manager : MonoBehaviour
         RickBody.linearVelocity = new Vector2 (_Horizontalvelocity, VerticalVelocity);
     }
  
-    private void Move(float Accel, float Daccel, Vector2 Minput)
+    protected virtual void Move(float Accel, float Daccel, Vector2 Minput)
     {
         if (_isdashing) return;
  
@@ -261,7 +267,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    private void turnC(Vector2 moveInput)
+    protected virtual void turnC(Vector2 moveInput)
     {
         if (_IsFacingR && moveInput.x < 0)
         {
@@ -272,7 +278,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    void Overload_turn(bool T)
+    protected virtual void Overload_turn(bool T)
     {
         ///<Aqui va una animacion de 'Giro' (cambio de direccion, opcional)
 
@@ -294,7 +300,7 @@ public class Movement_Manager : MonoBehaviour
  
     #region Jump 
  
-    private void JumpCheck()
+    protected virtual void JumpCheck()
     {
         if (_iswallSlidingFalling && _walljumpPostBufferT >= 0)
         {
@@ -360,7 +366,7 @@ public class Movement_Manager : MonoBehaviour
  
     }
  
-    private void InitialJump(int numberofJumpUsed)
+    protected virtual void InitialJump(int numberofJumpUsed)
     {
         _isJumping = true;
         _IsFalling = false;
@@ -375,7 +381,7 @@ public class Movement_Manager : MonoBehaviour
         VerticalVelocity = Mstas.InitialJumpVelocity; 
     }
  
-    private void  Jump()
+    protected virtual void  Jump()
     {
         //Apply Gravity While Jumping 
  
@@ -474,7 +480,7 @@ public class Movement_Manager : MonoBehaviour
         
     }
  
-    private void LandCheck()
+    protected virtual void LandCheck()
     {
         if ((_isJumping || _IsFalling || _iswalljumpFalling || _iswallSlidingFalling || _isWallSliding || _isdashFastFalling) && _isGit && VerticalVelocity <= 0f)
         {
@@ -499,7 +505,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    private void Fall()
+    protected virtual void Fall()
     {
         if (!_isGit && !_isJumping && !_isWallSliding && !_iswallJumping && !_isdashing && !_isGrabbingLedge && _isdashFastFalling)
         {
@@ -519,7 +525,7 @@ public class Movement_Manager : MonoBehaviour
  
     #region Wall Slide / Wall Jump
  
-    void WallSlide_Check()
+    protected virtual void WallSlide_Check()
     {
         if (_istouchingWall && !_isGit && !_isdashing)
         {
@@ -558,7 +564,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    private void StopWallSlidng()
+    protected virtual void StopWallSlidng()
     {
         if (_isWallSliding) //tambien peude cambiarse para que pase
         {
@@ -569,7 +575,7 @@ public class Movement_Manager : MonoBehaviour
         _isWallSliding = false;
     }
  
-    void WallSlide()
+    protected virtual void WallSlide()
     {
         if (_isWallSliding)
         {
@@ -579,7 +585,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    private void WallJumpCheck()
+    protected virtual void WallJumpCheck()
     {
         if (!_isGit && (_istouchingWall || _isWallSliding))
         {
@@ -599,7 +605,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    private void InitiateWallJump()
+    protected virtual void InitiateWallJump()
     {
         ///<Aqui va una animacion de 'Salto de Pared' (Wall Jump)
 
@@ -632,7 +638,7 @@ public class Movement_Manager : MonoBehaviour
         _Horizontalvelocity = Mathf.Abs(Mstas.walljumpD.x) * dirMultiplier;
     }
  
-    private void WallJump()
+    protected virtual void WallJump()
     {
         if (_iswallJumping)
         {
@@ -692,7 +698,7 @@ public class Movement_Manager : MonoBehaviour
     #endregion
 
     #region  Dash
-    void Dash_Check()
+    protected virtual void Dash_Check()
     {
         if (Input_Manager.DashWpress)
         {
@@ -727,7 +733,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
 
-    void Overload_InitiateJump()
+    protected virtual void Overload_InitiateJump()
     {
         _dashDirection = Input_Manager.movement; 
 
@@ -798,7 +804,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
 
-    void Dash()
+    protected virtual void Dash()
     {
         if (_isdashing)
         {
@@ -868,7 +874,7 @@ public class Movement_Manager : MonoBehaviour
 
     #region Ledge Grab
     //Detecta un borde al caer junto a una pared, lo agarra, y si ya esta colgado permite subir (salto) o soltar (abajo)
-    void LedgeGrab_Check()
+    protected virtual void LedgeGrab_Check()
     {
         if (!Mstas.LedgeGrabEnabled) return;
 
@@ -937,7 +943,7 @@ public class Movement_Manager : MonoBehaviour
     }
 
     //Sube al jugador encima del borde, no sube si no hay espacio libre arriba
-    private void LedgeClimb()
+    protected virtual void LedgeClimb()
     {
         float dir = _IsFacingR ? 1f : -1f;
 
@@ -958,7 +964,7 @@ public class Movement_Manager : MonoBehaviour
     }
 
     //Suelta el borde y activa el tiempo para que no lo vuelva a agarrar de inmediato
-    private void ReleaseLedge()
+    protected virtual void ReleaseLedge()
     {
         ///<Aqui va el fin de la animacion de 'Colgado del Borde' (se suelta del borde, pasa a caida)
 
@@ -968,7 +974,7 @@ public class Movement_Manager : MonoBehaviour
     #endregion
  
     #region Timer
-    private void Jump_ConterTime()
+    protected virtual void Jump_ConterTime()
     {
         _JumpBufferT -= Time.deltaTime; 
         _walljumpPostBufferT -= Time.deltaTime;
@@ -992,7 +998,7 @@ public class Movement_Manager : MonoBehaviour
  
     
  
-    private void Isgrounded_CollisionCheck()
+    protected virtual void Isgrounded_CollisionCheck()
     {
         //Estos dos coliders lo que hacen es detectar si esta parado en el suelo a diferencia del restodel codigo son solo controles
         Vector2 BoxRay = new Vector2(_FeetCoil.bounds.center.x, _FeetCoil.bounds.min.y);
@@ -1017,7 +1023,7 @@ public class Movement_Manager : MonoBehaviour
     }
 
     //Devuelve la normal de la superficie bajo los pies, se usa para seguir pendientes y curvas
-    private Vector2 GetGroundNormal()
+    protected virtual Vector2 GetGroundNormal()
     {
         Vector2 origin = new Vector2(_FeetCoil.bounds.center.x, _FeetCoil.bounds.min.y + Mstas.GDRayLength);
         RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, Mstas.GDRayLength * 2f, Mstas.Glayer);
@@ -1031,12 +1037,12 @@ public class Movement_Manager : MonoBehaviour
     }
 
     //Dice si una superficie es suficientemente plana para caminar sobre ella (MaxSlopeAngle)
-    private bool IsWalkableNormal(Vector2 normal)
+    protected virtual bool IsWalkableNormal(Vector2 normal)
     {
         return Vector2.Angle(normal, Vector2.up) <= Mstas.MaxSlopeAngle;
     }
 
-    private bool TouchingFloorContact()
+    protected virtual bool TouchingFloorContact()
     {
         if (VerticalVelocity > 0f) return false;
 
@@ -1051,7 +1057,7 @@ public class Movement_Manager : MonoBehaviour
         return false;
     }
 
-    private void Bumbhead() // akk Check head
+    protected virtual void Bumbhead() // akk Check head
     {
         Vector2 headcast = new Vector2(_FeetCoil.bounds.center.x, _BodyCoil.bounds.max.y);
         Vector2 headsice = new Vector2(_FeetCoil.bounds.size.x, Mstas.HeadDRayLength);
@@ -1066,7 +1072,7 @@ public class Movement_Manager : MonoBehaviour
         }
     }
  
-    private void IsTouchingWall()
+    protected virtual void IsTouchingWall()
     {
         float OriginPEnd = 0f; 
         if (_IsFacingR)
@@ -1094,7 +1100,7 @@ public class Movement_Manager : MonoBehaviour
     #endregion
  
     #region  ResetValues
-    private void Restart_JumpValues()
+    protected virtual void Restart_JumpValues()
     {
         _isJumping = false;
         _IsFalling = false;
@@ -1103,7 +1109,7 @@ public class Movement_Manager : MonoBehaviour
         _IsPastApexThreshold = false; 
     }
  
-    private void Restart_WallJumpValue()
+    protected virtual void Restart_WallJumpValue()
     {
         _iswallSlidingFalling = false; 
         _useWallJumpMstats = false;
@@ -1115,18 +1121,18 @@ public class Movement_Manager : MonoBehaviour
         
     }
  
-    private void ResetDashV()
+    protected virtual void ResetDashV()
     {
         _isdashFastFalling = false; 
         _dashOnGroundTimer = -0.1f; 
     }
  
-    private void ResetAmountDash()
+    protected virtual void ResetAmountDash()
     {
         _numberOfDashUsed = 0; 
     }
 
-    public void KillMovement()
+    public virtual void KillMovement()
     {
         ///<Aqui va una animacion de 'Daño' (se llama al recibir daño, cancela cualquier otra animacion de movimiento)
 
@@ -1150,7 +1156,7 @@ public class Movement_Manager : MonoBehaviour
         
     }
 
-    public void TeleportTo(Vector2 position)
+    public virtual void TeleportTo(Vector2 position)
 {
     KillMovement();
     RickBody.position = position;
@@ -1158,4 +1164,9 @@ public class Movement_Manager : MonoBehaviour
     Physics2D.SyncTransforms();
 }
     #endregion
+
+    protected virtual void IActive_HasPlayer()
+    {
+        Debug.Log ("Override: PlayerActive");
+    }
 }

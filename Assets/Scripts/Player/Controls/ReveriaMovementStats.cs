@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "C.Reveria_Player_Input_Manager")]
 
-public class Movement_Stats : ScriptableObject 
+public class C_ReveriaMovementStats : ScriptableObject 
 {
     [Header ("PlayerTags")]
 
