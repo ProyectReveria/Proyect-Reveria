@@ -22,3 +22,6 @@ MonoBehaviour:
     Enemy_Aceleration: 0.25
     Enemy_DAceleration: 0.25
     Enemy_LedgeCheckoofset: 0.15
+    Enemy_Status: 0
+    EnemyDetectionRange: 1
+    TimeBetweenAttacks: 1

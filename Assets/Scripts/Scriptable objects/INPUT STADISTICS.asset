@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5f39d80af9ba443a735e710bcbeaa7, type: 3}
   m_Name: INPUT STADISTICS
   m_EditorClassIdentifier: Assembly-CSharp::Movement_Stats
-  Arkhalis_LayerMask: 
-  Ariamis_LayerMask: 
+  Arkhalis_LayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  Ariamis_LayerMask:
+    serializedVersion: 2
+    m_Bits: 512
   MoveThreshold: 0.25
   MaxWalkSpeed: 5
   GAcceleration: 7.5

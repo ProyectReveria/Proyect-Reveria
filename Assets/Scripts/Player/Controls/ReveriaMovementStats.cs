@@ -8,8 +8,8 @@ public class C_ReveriaMovementStats : ScriptableObject
 {
     [Header ("PlayerTags")]
 
-    public string Arkhalis_LayerMask; 
-    public string Ariamis_LayerMask; 
+    public LayerMask Arkhalis_LayerMask; 
+    public LayerMask Ariamis_LayerMask; 
     
     
     [Header("Walk")]

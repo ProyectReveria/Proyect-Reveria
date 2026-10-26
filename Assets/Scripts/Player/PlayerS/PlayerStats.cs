@@ -12,8 +12,6 @@ public class PlayerStats : ScriptableObject
 
     [Header("Both Players Stadistics")]
 
-    //?Money esta temporalmente aqui
-    [Range (0, 999)] public int Money = 0; 
     [Header("Arkhalis")]
     [Range (5f, 10f)] public float _Arkhalis_HP = 5; 
     [Range (0f,2f)] public float _Arkhalis_Resistance = 0f;
@@ -22,6 +20,8 @@ public class PlayerStats : ScriptableObject
     [Range (0.5f,1f)] public float _Arkhalis_ongRange_Damage = 0.5f; 
     [Range (10f,20f)] public float _Arkhalis_HealthDamageRatio = 10f; 
     [Range (1f,2f)] public float NumberofHealthHealth = 1f; 
+    [Range(1f, 100f)] public float _Arkhalis_Speed = 5f;
+    [Range(1f, 100f)] public float _Arkhais_RunSpeed = 15f;
 
     [Header("Ariamis")]
     [Range (5f, 10f)] public float _Ariamis_HP = 5; 
@@ -33,4 +33,6 @@ public class PlayerStats : ScriptableObject
     [Range (20f,80f)] public float _Ariamis_MagicContainerStack = 20f; 
     [Range (1f,2f)] public float _AriamisGaingofMagicStack = 1f; 
     [Range (1f,2f)] public float _Ariamis_HealethRatio = 1f; 
+    [Range(1f, 100f)] public float Ariamis_Speed = 5f;
+    [Range(1f, 100f)] public float _Ariamis_RunSpeed = 15f;
 }

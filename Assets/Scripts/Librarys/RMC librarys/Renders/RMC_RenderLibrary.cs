@@ -7,12 +7,10 @@ using System.Collections.Generic;
 public abstract class RMC_RenderLibrary : MonoBehaviour , RMC_Render_Contracts
 {
     [Header ("AllGameobjects")]
-    public List<GameObject> allGameobjects_OnUpdateRender = new(); //Cosas van aqui: Enemigos, efectos visuales, cosas que den un peso impositivo al sistema perpetuo.
+   
     [Header ("Referencias")]
     [SerializeField] protected CircleCollider2D RenderCollider; 
-    [SerializeField] protected LayerMask Ground_layer; 
-    [SerializeField] protected LayerMask DamageEnviorment_layer; 
-    [SerializeField] protected LayerMask Player_Layer;
+    [SerializeField] protected PlayerManager Pmanager;
 
     //Referencial Data from the script
     #region  OnUpdate_FromUnity
@@ -29,7 +27,7 @@ public abstract class RMC_RenderLibrary : MonoBehaviour , RMC_Render_Contracts
 
     protected void Awake()
     {
-        OnRender_Awake(allGameobjects_OnUpdateRender);
+        OnRender_Awake(Pmanager.Render_Objects);
     }
 
     #endregion
@@ -37,13 +35,13 @@ public abstract class RMC_RenderLibrary : MonoBehaviour , RMC_Render_Contracts
     #region  OnRenderContracts
     protected virtual void OnEnter_RenderRange(Collision2D DetectedObject,bool Turn_On_of)
     {
-        if (allGameobjects_OnUpdateRender.Contains(DetectedObject.transform.gameObject))
+        if (Pmanager.Render_Objects.Contains(DetectedObject.transform.gameObject))
         {
             DetectedObject.transform.gameObject.SetActive(Turn_On_of);
         }
     }
 
-    protected virtual void OnRender_Awake(List<GameObject> Listed_objects)
+    public virtual void OnRender_Awake(List<GameObject> Listed_objects)
     {
         foreach (GameObject gameObject in Listed_objects)
         {
@@ -56,12 +54,12 @@ public abstract class RMC_RenderLibrary : MonoBehaviour , RMC_Render_Contracts
     #region AddToList
     public void AddToList(GameObject self)
     {
-        allGameobjects_OnUpdateRender.Add(self);
+        Pmanager.Render_Objects.Add(self);
     }
 
     public void RemmoveToList(GameObject self)
     {
-        allGameobjects_OnUpdateRender.Remove(self);
+        Pmanager.Render_Objects.Remove(self);
     }
     #endregion
 

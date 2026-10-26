@@ -1,7 +1,5 @@
 ///                     <NOTAS DE 'TO DO'>
 /// 
-///  -> Hacer un WorldLoader que descarge los efectos, los personajes, los lanzadores de proyectiles, los npc y todo aquello basicamente no sea el jugador o el escenario si esta fuera
-/// de un collider 30x30 
-/// 
-///  ->Arreglar los scripts aun ocupan implementacion de Ariamis - Arkhalis Movement Manager ya diferenciados
-/// 
+///  
+/// -> hay un error en el que al cambiar de personajes no se cambian los controles como tal, Arkhalis se ce al vacio, ergo arimais hace lo mismo, ocupa ser arreglado
+/// ->Revisar de forma extensa el codigo hiso cloude, aunque en teoria esta bien es posible sea redundante. debido a la naturaleza de el switch characters es normal sea un script absurdamente grande

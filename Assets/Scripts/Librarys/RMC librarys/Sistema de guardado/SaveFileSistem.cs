@@ -91,8 +91,6 @@ namespace RMC.SaveFile.SaveSerialice
                 if (File.Exists(path) && OverrideFile == false)
                 {
                     int Adition = UnityEngine.Random.Range(1,42891741);
-
-                    
                     string tempPath = Path_List.GustomName + Adition.ToString() + ".json";
                     while (File.Exists(Path.Combine(Path_List.Directory_PathSaveFile,tempPath)))
                     {
@@ -100,7 +98,6 @@ namespace RMC.SaveFile.SaveSerialice
                         string Path_Fixing = tempPath.Replace(".json","");
                         Path_Fixing = Path_Fixing + Adition_onFix.ToString() + ".json";
                         tempPath = Path_Fixing;
-
                     }
                     Path_List.SaveFile_Path = Path.Combine(Path_List.Directory_PathSaveFile,tempPath);
                     path =  Path_List.SaveFile_Path;
@@ -119,7 +116,6 @@ namespace RMC.SaveFile.SaveSerialice
                 Debug.Log($"[F/] {FailonGenFileGeneral}");
             }
         }
-
 
     }
     #endregion

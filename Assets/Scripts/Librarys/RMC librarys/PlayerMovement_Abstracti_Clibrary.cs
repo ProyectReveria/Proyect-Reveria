@@ -13,21 +13,21 @@ using RMC.Player_Interaction.ThePlayerGeneralManager;
 public abstract class Movement_Manager_Abstract : MonoBehaviour
 {   
     [Header ("SelfReference")]
+    //cambiar a verdadero cada que el personaje cambia entre arkhalis y ariamis (Alrearyrender es lo que hay que cambiar)
+    [SerializeField] public bool AlrearyRender = false;
+    [SerializeField] protected RMC_RenderLibrary BloodRender_Library;
+    [SerializeField] protected RMC_RenderLibrary MagicRender_Library;
     [SerializeField] protected Arkhalis_Movement_Manager BloodMovementManager;
     [SerializeField] protected Ariamis_Movement_Manager MagicMovmentManger;
-
-    [Header ("Camara References")]
-
-    [SerializeField] protected Camera BloodCamara;
-    [SerializeField] protected Camera MagicCamara;
-
+    [SerializeField] protected GameObject Blood_Character;
+    [SerializeField] protected GameObject Magic_character; 
     // _G = Ground 
     #region  References
     [Header ("References")]
 
     public C_ReveriaMovementStats Mstas;
-    [SerializeField] protected Collider2D _FeetCoil;
-    [SerializeField] protected Collider2D _BodyCoil; 
+    [SerializeField] public Collider2D _FeetCoil;
+    [SerializeField] public Collider2D _BodyCoil; 
 
     [SerializeField] protected GameObject Player; 
     [SerializeField] protected PlayerManager Pmanager; 
@@ -38,7 +38,7 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
     public float _Horizontalvelocity {get; private set;}
     public bool _IsFacingR; 
     //GroundHit
-    protected RaycastHit2D _Ghit; 
+    public RaycastHit2D _Ghit; 
     //heat hit
     protected RaycastHit2D _HeadHit; 
     //wallhit
@@ -117,8 +117,23 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
     {
         _IsFacingR = true; 
         RickBody = GetComponent<Rigidbody2D>();
-    }
 
+        Collider2D[] bloodCols = Blood_Character.GetComponentsInChildren<Collider2D>();
+        Collider2D[] magicCols = Magic_character.GetComponentsInChildren<Collider2D>();
+
+foreach (Collider2D Arkhalis_cols in bloodCols)
+{
+    foreach (Collider2D Ariamis_cols in magicCols)
+    {
+        Physics2D.IgnoreCollision(Arkhalis_cols, Ariamis_cols, true);
+    }
+}
+        
+    }
+    protected virtual void Start()
+{
+    Debug.Log($"{name} START pos={transform.position}");
+}
   
 
     protected virtual void Update()
@@ -162,7 +177,7 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        
+        Debug.Log($"{name} pos={RickBody.position} velReal={RickBody.linearVelocity} bodyType={RickBody.bodyType} simulated={RickBody.simulated}");
 
         Isgrounded_CollisionCheck();
         Bumbhead();
@@ -206,6 +221,7 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
  
     protected virtual void ApplyVelocity()
     {
+        Debug.Log($"{name} | H={_Horizontalvelocity} V={VerticalVelocity} | gravity={Mstas.Gravity} | input={Input_Manager.movement} | grounded={_isGit}");
         //mantiene al jugador quieto mientras esta colgado de un borde
         if (_isGrabbingLedge)
         {
@@ -1164,9 +1180,14 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
     Physics2D.SyncTransforms();
 }
     #endregion
-
+    #region  controls on update Character active
     protected virtual void IActive_HasPlayer()
     {
         Debug.Log ("Override: PlayerActive");
     }
+
+
+    #endregion
 }
+
+    

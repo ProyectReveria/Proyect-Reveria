@@ -44,7 +44,8 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
         
         public static RMC_SaveFile_Information Game_Data_FromSave; 
         public static string DefaulPath = Path_List.DefaultSaveFile_Path; 
-
+        public Arkhalis_Movement_Manager Amanager;
+        public Ariamis_Movement_Manager AmManager; 
 
         [Header ("Referencial Data")]
         public GameObject[] Players = new GameObject[1]; 
@@ -61,6 +62,16 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
         #region Awake 
         void Awake()
         {
+            Amanager.enabled = false;
+            AmManager.enabled = false;
+            if (Pmanager._IsArkhalisActive == true && Pmanager._IsAriamisActive == false)
+            {
+                Amanager.enabled = true;
+            }else if (Pmanager._IsAriamisActive == true && Pmanager._IsArkhalisActive == false)
+            {
+                AmManager.enabled = true;
+            }
+
             Path_List.InitiatePath();
             Game_Data_FromSave = new RMC_SaveFile_Information();
 
