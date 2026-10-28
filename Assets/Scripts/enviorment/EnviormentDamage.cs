@@ -3,12 +3,15 @@ using System.Collections;
 using RMC.Player_Interaction.ThePlayerGeneralManager;
 using NUnit.Framework;
 
+
 public class EnviormentDamage : MonoBehaviour
 {
     #region  Variables
     [Header ("Object References")]
-    [SerializeField] private Arkhalis_Movement_Manager BloodManager; 
-    [SerializeField] private Ariamis_Movement_Manager Magicmanager;
+
+    [SerializeField] private Arkhalis_Movement_Manager BloodManager;
+    [SerializeField] private GameObject BloodCharacter; 
+    [SerializeField] private GameObject MagicCharacter;
     [SerializeField] private PlayerStats PlayerStats;
     [SerializeField] private PlayerManager Pmanager; 
 
@@ -18,7 +21,7 @@ public class EnviormentDamage : MonoBehaviour
     {
         
 
-        if (hit.gameObject.CompareTag("Player"))
+        if (hit.gameObject == BloodCharacter && Pmanager._IsArkhalisActive ^ hit.gameObject == MagicCharacter && Pmanager._IsAriamisActive )
         {   
 
             StartCoroutine(Respawn_onStableGround());
@@ -41,7 +44,7 @@ public class EnviormentDamage : MonoBehaviour
             BloodManager.KillMovement();
         } else if (Pmanager._IsAriamisActive)
         {
-            Magicmanager.KillMovement();
+            //Magicmanager.KillMovement();
         }
         
         if (Pmanager._CanResiveDamage)
@@ -55,10 +58,10 @@ public class EnviormentDamage : MonoBehaviour
 
         if (Pmanager._IsArkhalisActive)
         {
-            BloodManager.TeleportTo(Magicmanager._LastStableground); 
+            //BloodManager.TeleportTo(Magicmanager._LastStableground); 
         } else if (Pmanager._IsAriamisActive)
         {
-            Magicmanager.TeleportTo(Magicmanager._LastStableground); 
+            //Magicmanager.TeleportTo(Magicmanager._LastStableground); 
         }
 
         Pmanager.PlayerCanMove = true;
