@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 65960294}
   - component: {fileID: 65960293}
   m_Layer: 5
-  m_Name: Arkhalis IU
+  m_Name: GlobalUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,8 +151,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1487317545}
   - {fileID: 1059193730}
+  - {fileID: 1487317545}
   m_Father: {fileID: 1924183879}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -236,9 +236,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc873f34ad2c86946b804afd4ee60b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArkhalisUserInterface
+  GManager: {fileID: 1266802723}
   PlayerStats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
   Pmanajer: {fileID: 1266802721}
-  Hp_UIArkhalis: {fileID: 1487317546}
+  GlobalHPUI_onTest: {fileID: 1487317546}
   Interaction_E: {fileID: 1059193731}
 --- !u!1 &180185505
 GameObject:
@@ -1607,6 +1608,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5fcba41e50327a4f92bcf3542172ef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
+  GManager: {fileID: 1266802723}
+  Is_ArkhalisDead: 0
+  Is_AriamisDead: 0
   Render_Objects: []
   _CanInteract: 0
   _CanResiveDamage: 1
@@ -1636,6 +1640,8 @@ MonoBehaviour:
   - {fileID: 1673037405}
   Pmanager: {fileID: 1266802721}
   _ScriptableObject_PlayerStats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
+  ArkhalisHPStatus_AfterUpgrades: 0
+  AriamisHPStatus_AfterUpgrades: 0
 --- !u!1 &1315276354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,7 +1824,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487317544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2793,6 +2799,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Arkhalis_Render
   RenderCollider: {fileID: 572174718}
   Pmanager: {fileID: 1266802721}
+--- !u!1 &1713697633
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1713697634}
+  m_Layer: 0
+  m_Name: Arkhalis_DiferentUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1713697634
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713697633}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1924183879}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1730434605
 GameObject:
   m_ObjectHideFlags: 0
@@ -7479,6 +7516,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 65960292}
+  - {fileID: 1713697634}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2099365316
@@ -8926,12 +8964,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b0a07206f915184ebf9806f508b23a8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enviorment_Test_Script_Damage
-  BloodManager: {fileID: 0}
-  Magicmanager: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::EnviormentDamage
+  BloodManager: {fileID: 1673037412}
+  MagicManager: {fileID: 305248739}
+  BloodCharacter: {fileID: 1673037405}
+  MagicCharacter: {fileID: 305248732}
   PlayerStats: {fileID: 11400000, guid: 6a379a316092a984f8d979cf37d0b09e, type: 2}
   Pmanager: {fileID: 1266802721}
-  player: {fileID: 1673037405}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

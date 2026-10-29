@@ -28,20 +28,28 @@ public class SwitchCharactersLibrary : MonoBehaviour
     [SerializeField] private float FollowerGroundCheckDistance = 0.05f; // que tan abajo busca piso cuando esta parado
     [SerializeField] private float FollowerFeetWidthMult = 0.95f;       // ancho de los rayos de piso respecto al FeetCoil
     [SerializeField] private float FollowerStepHeight = 0.4f;           // escalon o pendiente que sube caminando sin saltar
+    [SerializeField] private float FollowerHeadWidthMult = 0.9f;        // ancho de la caja de techo respecto al BodyCoil (menor que 1 para no confundir paredes con techo)
 
     [Header ("Saltos del seguidor")]
     [Range (1f, 100f), SerializeField] private float FollowerJumpHeightMult = 1.3f; // altura de salto del seguidor respecto a jumpHitgh (subelo si aun no llega)
     [SerializeField] private float NoFloorCheckDistance = 3f;      // si no hay piso a esta distancia hacia abajo, busca plataforma
-    [SerializeField] private float PlatformSearchInterval = 0.15f; // cada cuanto repite la busqueda mientras cae
+    [SerializeField] private float PlatformSearchInterval = 0.15f; // cada cuanto repite la busqueda de plataformas
     [SerializeField] private float PlatformSearchStep = 0.5f;      // separacion entre columnas que revisa
     [SerializeField] private float PlatformEdgeMargin = 0.3f;      // la plataforma debe seguir a esta distancia a cada lado (evita bordes justos)
     [SerializeField] private float JumpApexMargin = 0.4f;          // cuanto sube por encima de la plataforma antes de bajar
     [Range (0.5f, 1f), SerializeField] private float JumpReachSafety = 0.9f; // usa solo este porcentaje del alcance horizontal teorico
     [SerializeField] private float PlannedJumpMinSpeed = 4f;       // velocidad horizontal minima en un salto hacia plataforma
     [SerializeField] private float MinProgressToJump = 0.5f;       // cuanto debe acercarlo al objetivo una plataforma para valer la pena
+    [SerializeField] private float ActiveJumpMinRise = 0.5f;       // cuanto mas alto (sobre un escalon) debe estar el activo para que el seguidor salte hacia el
+
+    [Header ("Zonas de daño")]
+    [SerializeField] private LayerMask FollowerHazardLayer;        // vacio = usa automaticamente la capa "DamageEnviorment"
+    [SerializeField] private float HazardLookAhead = 1.5f;         // margen de vision hacia adelante, se suma a la distancia de frenado (menor = salta mas cerca del borde)
+    [SerializeField] private float HazardCheckDepth = 6f;          // que tan abajo busca una zona de daño en cada columna
+    [SerializeField] private float HazardCheckStep = 0.5f;         // separacion entre columnas al mirar hacia adelante (que sea menor al ancho de la trampa mas angosta)
 
     [Header ("Debug")]
-    [SerializeField] private bool DebugFollower = false;           // imprime por que el seguidor esta bloqueado y el estado fisico al cambiar de personaje
+    [SerializeField] private bool DebugFollower = false;           // imprime por que el seguidor esta bloqueado, salta o espera
     #endregion
 
     #region Variables
@@ -76,12 +84,31 @@ public class SwitchCharactersLibrary : MonoBehaviour
     private bool _pendingAirJump;     // salto planeado de dos tiempos: el segundo se hace en el apice
     private int _followerJumpsUsed;
     private float _platformSearchT;
+    private float _activeJumpT;       // temporizador de la busqueda de salto hacia el activo
+
+    // para no repetir el log de zona de daño cada paso de fisica
+    private bool _followerWaitingHazard;
     #endregion
 
     #region Unity Update API
 
     void Awake()
     {
+        // si no se asigno una capa de daño a mano, usa la capa "DamageEnviorment"
+        if (FollowerHazardLayer.value == 0)
+        {
+            int hazardLayer = LayerMask.NameToLayer("DamageEnviorment");
+
+            if (hazardLayer >= 0)
+            {
+                FollowerHazardLayer = 1 << hazardLayer;
+            }
+            else
+            {
+                Debug.LogWarning("SwitchCharactersLibrary: no existe la capa 'DamageEnviorment'. Asigna Follower Hazard Layer a mano o el seguidor no vera las trampas.");
+            }
+        }
+
         _bloodRb = Blood_Character.GetComponent<Rigidbody2D>();
         _magicRb = Magic_Character.GetComponent<Rigidbody2D>();
 
@@ -166,7 +193,7 @@ public class SwitchCharactersLibrary : MonoBehaviour
             return;
         }
 
-        // gravedad, piso y busqueda de plataforma: corre siempre
+        // gravedad, piso, techo y busqueda de plataforma: corre siempre
         ApplyFollowerVertical(follower, followerM);
 
         // segundo salto de un salto doble planeado, en el apice
@@ -174,6 +201,12 @@ public class SwitchCharactersLibrary : MonoBehaviour
         {
             _pendingAirJump = false;
             TryAirJumpToTarget(followerM);
+        }
+
+        // el activo esta en el suelo, mas arriba y a un salto de distancia: va hacia el
+        if (_followerGrounded && !_followerPlannedJump && activeM._Ghit.collider != null)
+        {
+            TryJumpToActive(active, activeM, followerM);
         }
 
         // salto hacia plataforma: avanza hacia el punto de aterrizaje
@@ -197,6 +230,8 @@ public class SwitchCharactersLibrary : MonoBehaviour
         _followerPlannedJump = false;
         _pendingAirJump = false;
         _followerJumpsUsed = 0;
+        _followerWaitingHazard = false;
+        _activeJumpT = 0f;
     }
 
     // el seguidor se mueve por transform, asi que va Kinematic y sin interpolacion; el activo vuelve a Dynamic con estado limpio
@@ -257,8 +292,62 @@ public class SwitchCharactersLibrary : MonoBehaviour
             }
         }
 
-        // acelera y frena en vez de saltar a la velocidad maxima de golpe
         float toTarget = targetX - followerX;
+
+        // mira hacia adelante: trampa o hueco en su camino
+        if (Mathf.Abs(toTarget) > 0.05f)
+        {
+            int moveDir = toTarget >= 0f ? 1 : -1;
+            float brakeDistance = (_followerVelX * _followerVelX) / (2f * Mathf.Max(FollowerAcceleration, 0.01f));
+
+            // solo mira hasta donde va a llegar: una trampa mas alla de su objetivo no lo detiene
+            float lookDistance = Mathf.Min(HazardLookAhead + brakeDistance, Mathf.Abs(toTarget) + HazardCheckStep);
+
+            if (HazardAhead(followerM, moveDir, lookDistance, out float hazardDist))
+            {
+                // si puede saltar la trampa hacia una plataforma segura mas cerca del activo, lo hace
+                if (_followerGrounded && TryPlanJumpToPlatform(followerM, moveDir, float.NegativeInfinity, true, hazardDist))
+                {
+                    if (DebugFollower)
+                    {
+                        Debug.Log("Seguidor: salta sobre la zona de daño");
+                    }
+
+                    _followerWaitingHazard = false;
+                    return;
+                }
+
+                // si no, frena antes de llegar y espera
+                if (DebugFollower && !_followerWaitingHazard)
+                {
+                    Debug.Log("Seguidor: zona de daño adelante sin donde aterrizar, se detiene");
+                }
+
+                _followerWaitingHazard = true;
+                _followerVelX = Mathf.MoveTowards(_followerVelX, 0f, FollowerAcceleration * Time.fixedDeltaTime);
+                MoveFollowerX(follower, followerM, _followerVelX * Time.fixedDeltaTime);
+                return;
+            }
+
+            // hueco sin piso adelante: si el activo no esta muy abajo y hay donde aterrizar al otro lado, lo cruza saltando; si no, sigue y cae
+            if (_followerGrounded
+                && _followerGoal.y >= followerM._FeetCoil.bounds.min.y - NoFloorCheckDistance
+                && GapAhead(followerM, moveDir, lookDistance, out float gapDist)
+                && TryPlanJumpToPlatform(followerM, moveDir, float.NegativeInfinity, true, gapDist))
+            {
+                if (DebugFollower)
+                {
+                    Debug.Log("Seguidor: salta un hueco");
+                }
+
+                _followerWaitingHazard = false;
+                return;
+            }
+        }
+
+        _followerWaitingHazard = false;
+
+        // acelera y frena en vez de saltar a la velocidad maxima de golpe
         float desiredVel = Mathf.Clamp(toTarget * FollowerArriveSmoothing, -speed, speed);
         _followerVelX = Mathf.MoveTowards(_followerVelX, desiredVel, FollowerAcceleration * Time.fixedDeltaTime);
 
@@ -358,6 +447,100 @@ public class SwitchCharactersLibrary : MonoBehaviour
     }
     #endregion
 
+    #region Zonas de daño y huecos
+    // un collider es zona de daño si el o alguno de sus padres tiene EnviormentDamage
+    bool IsHazard(Collider2D col)
+    {
+        return col != null && col.GetComponentInParent<EnviormentDamage>() != null;
+    }
+
+    // suelo normal + capas de daño: asi las trampas se detectan aunque no esten en Glayer
+    int HazardMask(C_ReveriaMovementStats stats)
+    {
+        return stats.Glayer | FollowerHazardLayer;
+    }
+
+    // true si lo primero que hay bajo esa columna es una zona de daño
+    bool HazardBelow(float x, float fromY, C_ReveriaMovementStats stats)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(x, fromY), Vector2.down, HazardCheckDepth, HazardMask(stats));
+        return hit.collider != null && hit.distance > 0.0001f && IsHazard(hit.collider);
+    }
+
+    // mira columna por columna hacia adelante (hasta 'distance') si hay una zona de daño debajo; devuelve a que distancia esta
+    bool HazardAhead(Movement_Manager_Abstract followerM, int dir, float distance, out float hazardDist)
+    {
+        hazardDist = 0f;
+
+        Collider2D feet = followerM._FeetCoil;
+        C_ReveriaMovementStats stats = followerM.Mstas;
+
+        float startX = feet.bounds.center.x;
+        float fromY  = feet.bounds.min.y + FollowerStepHeight;
+
+        for (float d = HazardCheckStep; d <= distance + HazardCheckStep; d += HazardCheckStep)
+        {
+            float lookD = Mathf.Min(d, distance);
+            float x = startX + dir * lookD;
+
+            if (HazardBelow(x, fromY, stats))
+            {
+                hazardDist = lookD;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // mira columna por columna hacia adelante si no hay suelo debajo (hueco); devuelve a que distancia empieza
+    bool GapAhead(Movement_Manager_Abstract followerM, int dir, float distance, out float gapDist)
+    {
+        gapDist = 0f;
+
+        Collider2D feet = followerM._FeetCoil;
+        C_ReveriaMovementStats stats = followerM.Mstas;
+
+        float startX = feet.bounds.center.x;
+        float fromY  = feet.bounds.min.y + FollowerStepHeight;
+
+        for (float d = HazardCheckStep; d <= distance + HazardCheckStep; d += HazardCheckStep)
+        {
+            float lookD = Mathf.Min(d, distance);
+            float x = startX + dir * lookD;
+
+            RaycastHit2D hit = Physics2D.Raycast(new Vector2(x, fromY), Vector2.down, FollowerStepHeight + NoFloorCheckDistance, HazardMask(stats));
+
+            if (hit.collider == null)
+            {
+                gapDist = lookD;
+                return true;
+            }
+        }
+
+        return false;
+    }
+    #endregion
+
+    #region Techo
+    // caja delgada sobre la cabeza hacia arriba: true si hay techo (o trampa) a menos de 'distance'; freeDist = cuanto puede subir antes de tocarlo
+    bool CeilingAbove(Collider2D body, C_ReveriaMovementStats stats, float distance, out float freeDist)
+    {
+        freeDist = distance;
+
+        Vector2 size   = new Vector2(body.bounds.size.x * FollowerHeadWidthMult, 0.02f);
+        Vector2 origin = new Vector2(body.bounds.center.x, body.bounds.max.y - 0.01f);
+
+        RaycastHit2D hit = Physics2D.BoxCast(origin, size, 0f, Vector2.up, distance, HazardMask(stats));
+
+        if (hit.collider == null) return false;
+
+        // distancia 0 = la cabeza ya esta tocando el techo: no puede subir nada
+        freeDist = Mathf.Max(hit.distance, 0f);
+        return true;
+    }
+    #endregion
+
     #region Teletransporte
     void TeleportFollowerBehindActive(GameObject active, GameObject follower, Movement_Manager_Abstract activeM, Movement_Manager_Abstract followerM, int side)
     {
@@ -379,7 +562,7 @@ public class SwitchCharactersLibrary : MonoBehaviour
         // plan B: justo sobre el activo
         Vector3 chosen = new Vector3(activeX - bodyCenterOffX, pivotY, followerPos.z);
 
-        // del lugar normal hacia el activo: el primero con espacio libre y suelo debajo
+        // del lugar normal hacia el activo: el primero con espacio libre, suelo debajo y sin zona de daño
         for (float d = DistanceBetweenCharactersXorControled; d >= 0f; d -= 0.5f)
         {
             float x = activeX + side * d;
@@ -388,6 +571,7 @@ public class SwitchCharactersLibrary : MonoBehaviour
 
             if (Physics2D.OverlapBox(bodyCenter, body.bounds.size * 0.9f, 0f, stats.Glayer) != null) continue;
             if (Physics2D.Raycast(new Vector2(x, activeFeetY + 0.2f), Vector2.down, 1f, stats.Glayer).collider == null) continue;
+            if (HazardBelow(x, activeFeetY + 0.2f, stats)) continue;
 
             chosen = candidate;
             break;
@@ -399,10 +583,11 @@ public class SwitchCharactersLibrary : MonoBehaviour
     }
     #endregion
 
-    #region Gravedad y piso del seguidor
+    #region Gravedad, piso y techo del seguidor
     void ApplyFollowerVertical(GameObject follower, Movement_Manager_Abstract followerM)
     {
         Collider2D feet = followerM._FeetCoil;
+        Collider2D body = followerM._BodyCoil;
         C_ReveriaMovementStats stats = followerM.Mstas;
 
         // velocidad media del paso: asi la parabola coincide con la formula y no pierde altura
@@ -413,10 +598,24 @@ public class SwitchCharactersLibrary : MonoBehaviour
 
         Vector3 pos = follower.transform.position;
 
-        // subiendo: no se busca piso, solo se mueve
+        // subiendo: no se busca piso, pero si techo
         if (avgVel > 0f)
         {
-            pos.y += deltaY;
+            float rise = deltaY;
+
+            if (CeilingAbove(body, stats, deltaY + 0.02f, out float freeUp))
+            {
+                // se golpea la cabeza: sube solo hasta tocar el techo y empieza a caer, igual que el jugador
+                rise = Mathf.Max(freeUp - 0.02f, 0f);
+                _followerVelY = -0.1f;
+
+                if (DebugFollower)
+                {
+                    Debug.Log("Seguidor: se golpeo la cabeza contra un techo");
+                }
+            }
+
+            pos.y += rise;
             _followerGrounded = false;
             SetFollowerPosition(follower, pos);
             return;
@@ -505,11 +704,37 @@ public class SwitchCharactersLibrary : MonoBehaviour
         TryPlanJumpToPlatform(followerM, 0, float.NegativeInfinity, false);
     }
 
-    // onlySide: 0 = ambos lados, 1 = derecha, -1 = izquierda | minDy: altura minima respecto a los pies
-    // requireProgress: la plataforma debe acercarlo al objetivo (para paredes); al caer se acepta cualquiera
-    bool TryPlanJumpToPlatform(Movement_Manager_Abstract followerM, int onlySide, float minDy, bool requireProgress)
+    // el activo esta en el suelo y mas arriba: si hay una plataforma alcanzable que lo acerque a el, salta
+    void TryJumpToActive(GameObject active, Movement_Manager_Abstract activeM, Movement_Manager_Abstract followerM)
     {
-        if (!FindReachablePlatform(followerM, onlySide, minDy, requireProgress, out JumpPlan plan))
+        if (_followerPlannedJump || _pendingAirJump) return;
+
+        _activeJumpT -= Time.fixedDeltaTime;
+        if (_activeJumpT > 0f) return;
+        _activeJumpT = PlatformSearchInterval;
+
+        Collider2D feet = followerM._FeetCoil;
+
+        // si el activo no esta mas arriba de lo que sube caminando, no hace falta saltar
+        float rise = activeM._FeetCoil.bounds.min.y - feet.bounds.min.y;
+        if (rise < FollowerStepHeight + ActiveJumpMinRise) return;
+
+        // casi justo debajo del activo: busca a ambos lados; si no, solo hacia el
+        float dx = active.transform.position.x - feet.bounds.center.x;
+        int side = Mathf.Abs(dx) < PlatformSearchStep ? 0 : (dx >= 0f ? 1 : -1);
+
+        if (TryPlanJumpToPlatform(followerM, side, FollowerStepHeight + 0.1f, true) && DebugFollower)
+        {
+            Debug.Log("Seguidor: salta hacia el activo");
+        }
+    }
+
+    // onlySide: 0 = ambos lados, 1 = derecha, -1 = izquierda | minDy: altura minima respecto a los pies
+    // requireProgress: la plataforma debe acercarlo al objetivo (para paredes, trampas y huecos); al caer se acepta cualquiera
+    // minOffset: distancia horizontal minima a la plataforma (para aterrizar mas alla de una trampa o un hueco)
+    bool TryPlanJumpToPlatform(Movement_Manager_Abstract followerM, int onlySide, float minDy, bool requireProgress, float minOffset = 0f)
+    {
+        if (!FindReachablePlatform(followerM, onlySide, minDy, requireProgress, minOffset, out JumpPlan plan))
         {
             return false;
         }
@@ -539,7 +764,7 @@ public class SwitchCharactersLibrary : MonoBehaviour
     }
 
     // barre columnas y elige la plataforma alcanzable que deja al seguidor mas cerca de su objetivo
-    bool FindReachablePlatform(Movement_Manager_Abstract followerM, int onlySide, float minDy, bool requireProgress, out JumpPlan best)
+    bool FindReachablePlatform(Movement_Manager_Abstract followerM, int onlySide, float minDy, bool requireProgress, float minOffset, out JumpPlan best)
     {
         best = default;
 
@@ -556,11 +781,18 @@ public class SwitchCharactersLibrary : MonoBehaviour
         float maxHeight = jumpsLeft >= 2 ? JumpHeight(stats) * 2f - 0.3f : singleMax;
         float maxReachX = stats.MaxRunSpeed * (2f * stats.TimeTillJumpApex * jumpsLeft) * JumpReachSafety;
 
+        // cuanto puede subir antes de pegarle a un techo (aproximado: mide recto hacia arriba desde donde esta)
+        float headroom = float.MaxValue;
+        if (CeilingAbove(body, stats, maxHeight, out float freeUp))
+        {
+            headroom = freeUp;
+        }
+
         float currentScore = Vector2.Distance(new Vector2(feetX, feetY), _followerGoal);
         float bestScore = float.MaxValue;
         bool found = false;
 
-        for (float offset = 0f; offset <= maxReachX; offset += PlatformSearchStep)
+        for (float offset = Mathf.Max(0f, minOffset); offset <= maxReachX; offset += PlatformSearchStep)
         {
             for (int side = 0; side < 2; side++)
             {
@@ -577,6 +809,13 @@ public class SwitchCharactersLibrary : MonoBehaviour
                 float dy = topY - feetY;
 
                 if (dy < minDy) continue;
+
+                // si hay un techo bajo, no planea un salto que necesite subir mas de lo que cabe
+                float neededRise = dy <= singleMax
+                    ? Mathf.Clamp(dy + JumpApexMargin, 0.2f, JumpHeight(stats))
+                    : dy + 0.1f;
+
+                if (neededRise > headroom) continue;
 
                 JumpPlan plan = default;
                 bool ok = false;
@@ -615,23 +854,27 @@ public class SwitchCharactersLibrary : MonoBehaviour
         return found;
     }
 
-    // devuelve la altura de la superficie caminable en esa columna, si es valida para aterrizar
+    // devuelve la altura de la superficie caminable en esa columna, si es valida para aterrizar (y no es zona de daño)
     bool SampleTopSurface(float x, float feetY, float maxHeight, Collider2D body, C_ReveriaMovementStats stats, out float topY)
     {
         topY = 0f;
 
         float startY = feetY + maxHeight;
         float rayLength = maxHeight + 0.2f;
+        int mask = HazardMask(stats);
 
-        RaycastHit2D hit = Physics2D.Raycast(new Vector2(x, startY), Vector2.down, rayLength, stats.Glayer);
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(x, startY), Vector2.down, rayLength, mask);
 
         // distancia 0 = el rayo empezo dentro de un collider
         if (hit.collider == null || hit.distance < 0.001f) return false;
         if (Vector2.Angle(hit.normal, Vector2.up) > stats.MaxSlopeAngle) return false;
 
-        // la plataforma debe seguir a ambos lados, para no apuntar justo al borde
-        RaycastHit2D left  = Physics2D.Raycast(new Vector2(x - PlatformEdgeMargin, startY), Vector2.down, rayLength, stats.Glayer);
-        RaycastHit2D right = Physics2D.Raycast(new Vector2(x + PlatformEdgeMargin, startY), Vector2.down, rayLength, stats.Glayer);
+        // nunca aterriza sobre una zona de daño
+        if (IsHazard(hit.collider)) return false;
+
+        // la plataforma debe seguir a ambos lados, para no apuntar justo al borde; una trampa pegada tambien la descarta
+        RaycastHit2D left  = Physics2D.Raycast(new Vector2(x - PlatformEdgeMargin, startY), Vector2.down, rayLength, mask);
+        RaycastHit2D right = Physics2D.Raycast(new Vector2(x + PlatformEdgeMargin, startY), Vector2.down, rayLength, mask);
 
         if (left.collider != hit.collider || right.collider != hit.collider) return false;
         if (Mathf.Abs(left.point.y - hit.point.y) > 0.1f || Mathf.Abs(right.point.y - hit.point.y) > 0.1f) return false;

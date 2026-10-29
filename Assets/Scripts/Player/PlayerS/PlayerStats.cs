@@ -3,6 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Arkhalis & Ariamis Stadistics")]
 public class PlayerStats : ScriptableObject
 {
+    [Header ("Revive timers & Iframes")]
+    [Range (5f,15f)] public float Revivietime_ForAllCharacters = 5f; 
+    [Range (0.25f, 2.25f)] public float Iframes_OnHit = 0.25f; 
+    [Range(0.25f, 1f)] public float Iframes_OnEnviormnetDamage = 1f; 
+    [Range (0.25f, 2.25f)] public float OnIframes_BossSpecialAttack = 1.25f; 
+
     [Header ("Damage by enviorment & Respawn time")]
 
     [Range (1f,5f)] public float RespawnTime = 1; 

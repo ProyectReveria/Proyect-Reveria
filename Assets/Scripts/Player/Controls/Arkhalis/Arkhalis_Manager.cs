@@ -20,7 +20,7 @@ public class Arkhalis_Movement_Manager : Movement_Manager_Abstract
     {
         if (Pmanager._IsAriamisActive == true && !AlrearyRender)
         {
-           
+
             BloodMovementManager.KillMovement();
             //Unrenderall
             MagicRender_Library.OnRender_Awake(Pmanager.Render_Objects);
@@ -32,6 +32,11 @@ public class Arkhalis_Movement_Manager : Movement_Manager_Abstract
             BloodMovementManager.enabled = false;
             //colliders: el nuevo activo (Ariamis) solido, el seguidor (Arkhalis) en trigger
 
+        }
+
+        if (Pmanager._IsArkhalisActive && Pmanager.Is_ArkhalisDead)
+        {
+            Pmanager._IsArkhalisActive = false;
         }
     }
 }

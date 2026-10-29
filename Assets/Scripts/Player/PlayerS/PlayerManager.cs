@@ -1,8 +1,16 @@
 using System.Collections.Generic;
+using RMC.Player_Interaction.ThePlayerGeneralManager;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour , Reveria_Contract_Broker
 {
+    [Header ("References")]
+    public RMC_ThePlayerGeneralManager GManager;
+    [Header ("IsPlayerDead?")]
+
+    public bool Is_ArkhalisDead = false; 
+    public bool Is_AriamisDead = false;
+
     [Header ("RenderObjectList")]
     public List<GameObject> Render_Objects = new List<GameObject>();
     [Header ("Interactions")]
@@ -28,11 +36,15 @@ public class PlayerManager : MonoBehaviour , Reveria_Contract_Broker
 
     void Awake()
     {
-        Arkhalis_HPStatus = Stats._Arkhalis_HP;
+        Arkhalis_HPStatus = GManager.ArkhalisHPStatus_AfterUpgrades;
+        Ariamis_HPstatus = GManager.AriamisHPStatus_AfterUpgrades; 
     }
 
-    public void Restart_HP()
+    void HealthAllPlayers()
     {
-        Arkhalis_HPStatus = Stats._Arkhalis_HP;
+        Arkhalis_HPStatus = GManager.ArkhalisHPStatus_AfterUpgrades;
+        Ariamis_HPstatus = GManager.AriamisHPStatus_AfterUpgrades; 
     }
+
+    
 }

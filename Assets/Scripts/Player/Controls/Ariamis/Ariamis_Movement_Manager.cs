@@ -27,5 +27,11 @@ public class Ariamis_Movement_Manager : Movement_Manager_Abstract
             //colliders: el nuevo activo (Arkhalis) solido, el seguidor (Ariamis) en trigger
 
         }
+
+        if (Pmanager._IsAriamisActive && Pmanager.Is_AriamisDead)
+        {
+            Pmanager._IsAriamisActive = false;
+
+        }
     }
 }

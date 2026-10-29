@@ -54,8 +54,8 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
         public PlayerStats _ScriptableObject_PlayerStats;
 
         //Non visible
-        private float ArkhalisHPStatus_AfterUpgrades; 
-        private float AriamisHPStatus_AfterUpgrades;
+        public float ArkhalisHPStatus_AfterUpgrades; 
+        public float AriamisHPStatus_AfterUpgrades;
 
         #endregion
 
@@ -106,13 +106,14 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
             AriamisHPStatus_AfterUpgrades = _ScriptableObject_PlayerStats._Ariamis_HP; 
         }
 
-        void SaveAndRegen()
+        public void SaveAndRegen()
         {
             Pmanager.Arkhalis_HPStatus = _ScriptableObject_PlayerStats._Arkhalis_HP; 
             Pmanager.Ariamis_HPstatus = _ScriptableObject_PlayerStats._Ariamis_HP; 
             SerialiceGameData.Serialize_GameData(Game_Data_FromSave);
             
         }
+
 
         static void  Deserialice(){
             SerialiceGameData.Deserialice_GameDAta<RMC_SaveFile_Information>(DefaulPath,Action_Deserialice);
