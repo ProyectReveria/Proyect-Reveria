@@ -111,12 +111,15 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
             Pmanager.Arkhalis_HPStatus = _ScriptableObject_PlayerStats._Arkhalis_HP; 
             Pmanager.Ariamis_HPstatus = _ScriptableObject_PlayerStats._Ariamis_HP; 
             SerialiceGameData.Serialize_GameData(Game_Data_FromSave);
-            
         }
 
 
         static void  Deserialice(){
+            //! NO TOQUIEN ESTA MIERDA, ESTA MIERDA ES SENSIBLE COMO RICK
             SerialiceGameData.Deserialice_GameDAta<RMC_SaveFile_Information>(DefaulPath,Action_Deserialice);
+
+            ///
+            ///  llamo A -> A{B} => Methodo C ()
         }
 
         static void  Action_Deserialice(RMC_SaveFile_Information data)

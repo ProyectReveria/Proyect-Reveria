@@ -7,5 +7,6 @@ public class EnemyStats : ScriptableObject
 {
     [Header ("Test Enemy")]
     public StructureLibrary.Enemy_UniversalStats T_U_P_C; //"Testigo universal del pecado capital 
+    public StructureLibrary.Enemy_UniversalStats JUANITODIOSSALVADORDETODOSLOSPERUANOSABSOLUTOSEñORDELASMANOSBIENDIBUJADAS;
     
 }

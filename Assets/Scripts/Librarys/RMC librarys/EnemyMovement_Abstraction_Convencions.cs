@@ -143,7 +143,6 @@ public abstract class Enemy_Movement_BaseBahivior : MonoBehaviour, Reveria_Contr
 
 }
 
-
 #region Attack script
 public abstract class Enemy_AtackDetection : MonoBehaviour 
 {

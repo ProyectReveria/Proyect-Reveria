@@ -31,7 +31,6 @@ namespace RMC.SaveFile.SaveSerialice
         //directory 
         public static readonly string DirectoryName = "SaveFiles"; 
         public static string Directory_PathSaveFile;
-
         //SaveFile
         public static string GustomName = "SaveFile";  //Recordar implementar para poner los gustom name y para poner la opcion de si sobre- escribir o no.
         public static string DefaultName = "SaveFile";
@@ -46,8 +45,6 @@ namespace RMC.SaveFile.SaveSerialice
             DefaultSaveFile_Path = Path.Combine(Directory_PathSaveFile, DefaultName);
             SaveFile_Path = Path.Combine(Directory_PathSaveFile, GustomName);
         }
-
-
 
     }
     #endregion

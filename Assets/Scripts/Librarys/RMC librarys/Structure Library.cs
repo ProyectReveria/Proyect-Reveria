@@ -6,6 +6,7 @@ namespace reveria_Stadistics_Structs
     {
         #region  Enums
 
+        //! PAra el backend: hacer que esto sirva para saber si el jugador esta vivo, muerto o le pararon las patas mas feo que al tipo atrapado en gestion de servidores
         public enum _EnemyStatus
         {
             alive, 
@@ -36,14 +37,15 @@ namespace reveria_Stadistics_Structs
         }
         #endregion
         #region  Enemy 
-        [System.Serializable]
-        public struct Enemy_UniversalStats
+        [System.Serializable] //? <--- decalran esto
+        public struct Enemy_UniversalStats //? --- declaran estructura
         {
             /// !<Sobre la vida de los enemigos>
             ///  La vida de los enemigos esta puesta como un valor 'Float' esto se debe a que la vida en general tanto de jugador como de enemigos se trabaja en valores de:
             ///  1.0 y 0.5 
             ///  esto significa ningun arma en el juego ara daño que no sea 1 o 0.5 estrictamente; 
             /// !</End>
+            /// //? Los valores siemrpe son publicos, siempre en range por balance
             [Range(1f,700f)] public float EnemyHP; 
             [Range(0f,5f)] public float Enemy_Resistance; 
             //TODO: Se aplica le mismo principio de la vida al daño

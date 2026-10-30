@@ -98,6 +98,7 @@ public class C_ReveriaMovementStats : ScriptableObject
     public readonly Vector2[] DashDirection = new Vector2[]
     {
         //quitar el normalzie ne las diagnonales permite que vaya mas rapido, valorar si es util
+        //! el que toque esto es de oaxaca y|o judio
         new Vector2(0,0), //Nothing
         new Vector2(1,0), //rigth
         new Vector2(1,1).normalized, //top rigth
@@ -134,11 +135,6 @@ public class C_ReveriaMovementStats : ScriptableObject
 
     public float AdjustmentJFactorWallJump {get; private set; }
 
-    private void Oalidate()
-    {
-        CalculateValues();
-    }
-
     private void OnEnable()
     {
         CalculateValues();
@@ -146,6 +142,7 @@ public class C_ReveriaMovementStats : ScriptableObject
 
     private void CalculateValues()
     {
+        //! El que toque esto lo mando a siria a recoger agua 
         //jump
         AdjustmentJFactor = jumpHitgh * jumpHitghCompenFactor; 
         Gravity = -(2f * AdjustmentJFactor) / Mathf.Pow(TimeTillJumpApex, 2F);//esta formula debe ser esta y punto

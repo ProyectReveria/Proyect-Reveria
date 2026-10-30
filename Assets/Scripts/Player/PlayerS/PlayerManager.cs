@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour , Reveria_Contract_Broker
     public List<GameObject> Render_Objects = new List<GameObject>();
     [Header ("Interactions")]
     public  bool _CanInteract = false; 
-    public bool _CanResiveDamage = true; 
+    public bool _CanResiveDamage = false; 
     public bool _Iframes = false; 
     [Header ("Player Stats")]
     [SerializeField] private PlayerStats Stats; 
