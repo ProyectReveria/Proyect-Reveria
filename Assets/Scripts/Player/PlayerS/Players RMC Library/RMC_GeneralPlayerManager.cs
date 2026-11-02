@@ -22,12 +22,12 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
 
             [Header ("Ignore")]
 
-            public  bool _WallSlideisAllow = true;
-            public  bool  _DoubleJumpisAllow = true; 
-            public bool _WalljumpIsAllow = true;
-            public  bool _DashIsActive = true;
+            public  bool _WallSlideisAllow = false;
+            public  bool  _DoubleJumpisAllow = false; 
+            public bool _WalljumpIsAllow = false;
+            public  bool _DashIsActive = false;
 
-            public  bool _Player_Money = true;
+            public  int _Player_Money = 0;
 
             public  Vector2 SpawnPoint; 
             //Do Not Give It the Wrong Path (Can be really bad)
