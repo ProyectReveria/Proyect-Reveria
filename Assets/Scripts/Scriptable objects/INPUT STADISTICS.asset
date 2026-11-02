@@ -35,7 +35,7 @@ MonoBehaviour:
   HeadWidth: 0.75
   WallDetectionRAyLength: 0.125
   WallDetectRayHeigthMult: 0.9
-  jumpHitgh: 2
+  jumpHitgh: 4
   jumpHitghCompenFactor: 1
   TimeTillJumpApex: 0.25
   GraviyOnReleaseMult: 1

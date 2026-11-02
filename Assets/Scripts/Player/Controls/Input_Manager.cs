@@ -13,6 +13,7 @@ public class Input_Manager : MonoBehaviour
     public static bool DashWpress; 
     public static bool AttackWassPressThisFrame; 
     public static bool _OnChangeCharacterWasPressThisFrame;
+    public static bool _OnDropDownPlatformEvent;
     
     private InputAction _MovementHorizontal; 
     private InputAction _Jump; 
@@ -22,6 +23,7 @@ public class Input_Manager : MonoBehaviour
 
     private InputAction _Attack; 
     private InputAction _OnChangeCharacter;
+    private InputAction _OnDropDownPlatform;
 
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class Input_Manager : MonoBehaviour
         _Dash = Player.actions["Dash"]; 
         _Attack = Player.actions["Attack"];
         _OnChangeCharacter = Player.actions["ChangeCharacter"];
+        _OnDropDownPlatform = Player.actions["DropDownPlatform"];
         
     }
 
@@ -49,6 +52,7 @@ public class Input_Manager : MonoBehaviour
         DashWpress = _Dash.WasPressedThisFrame(); 
         AttackWassPressThisFrame = _Attack.WasPressedThisFrame(); 
         _OnChangeCharacterWasPressThisFrame = _OnChangeCharacter.WasPressedThisFrame();
+        _OnDropDownPlatformEvent = _OnDropDownPlatform.WasPressedThisFrame();
 
         
     }

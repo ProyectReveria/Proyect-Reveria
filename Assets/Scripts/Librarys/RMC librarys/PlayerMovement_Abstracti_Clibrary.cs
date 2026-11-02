@@ -19,8 +19,6 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
     [SerializeField] protected RMC_RenderLibrary MagicRender_Library;
     [SerializeField] protected Arkhalis_Movement_Manager BloodMovementManager;
     [SerializeField] protected Ariamis_Movement_Manager MagicMovmentManger;
-    [SerializeField] protected GameObject Blood_Character;
-    [SerializeField] protected GameObject Magic_character; 
     // _G = Ground 
     #region  References
     [Header ("References")]
@@ -41,6 +39,7 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
     public RaycastHit2D _Ghit; 
     //heat hit
     protected RaycastHit2D _HeadHit; 
+    protected RaycastHit2D[] _headHits = new RaycastHit2D[6];
     //wallhit
     protected RaycastHit2D _wallhit; 
     protected RaycastHit2D _lastwallhit; 
@@ -117,17 +116,6 @@ public abstract class Movement_Manager_Abstract : MonoBehaviour
     {
         _IsFacingR = true; 
         RickBody = GetComponent<Rigidbody2D>();
-
-        Collider2D[] bloodCols = Blood_Character.GetComponentsInChildren<Collider2D>();
-        Collider2D[] magicCols = Magic_character.GetComponentsInChildren<Collider2D>();
-
-foreach (Collider2D Arkhalis_cols in bloodCols)
-{
-    foreach (Collider2D Ariamis_cols in magicCols)
-    {
-        Physics2D.IgnoreCollision(Arkhalis_cols, Ariamis_cols, true);
-    }
-}
         
     }
     protected virtual void Start()
@@ -1077,15 +1065,33 @@ foreach (Collider2D Arkhalis_cols in bloodCols)
     {
         Vector2 headcast = new Vector2(_FeetCoil.bounds.center.x, _BodyCoil.bounds.max.y);
         Vector2 headsice = new Vector2(_FeetCoil.bounds.size.x, Mstas.HeadDRayLength);
- 
-        _HeadHit = Physics2D.BoxCast(headcast, headsice, 0f, Vector2.up, Mstas.HeadDRayLength, Mstas.Glayer); 
-        if (_HeadHit.collider != null)
+
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(Mstas.Glayer);
+        filter.useTriggers = Physics2D.queriesHitTriggers;
+
+        int count = Physics2D.BoxCast(headcast, headsice, 0f, Vector2.up, filter, _headHits, Mstas.HeadDRayLength);
+
+        _IbumHead = false;
+
+        for (int i = 0; i < count; i++)
         {
-            _IbumHead = true; 
-        } else
-        {
-            _IbumHead= false;
+            // una plataforma de una via se atraviesa desde abajo: no cuenta como techo
+            if (IsOneWayPlatform(_headHits[i].collider)) continue;
+
+            _HeadHit = _headHits[i];
+            _IbumHead = true;
+            break;
         }
+    }
+
+    // true si el collider usa un Platform Effector con "Use One Way"
+    protected virtual bool IsOneWayPlatform(Collider2D col)
+    {
+        if (col == null || !col.usedByEffector) return false;
+
+        PlatformEffector2D effector = col.GetComponent<PlatformEffector2D>();
+        return effector != null && effector.useOneWay;
     }
  
     protected virtual void IsTouchingWall()
@@ -1189,5 +1195,3 @@ foreach (Collider2D Arkhalis_cols in bloodCols)
 
     #endregion
 }
-
-    

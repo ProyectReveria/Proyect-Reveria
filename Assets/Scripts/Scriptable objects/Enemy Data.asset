@@ -25,3 +25,16 @@ MonoBehaviour:
     Enemy_Status: 0
     EnemyDetectionRange: 1
     TimeBetweenAttacks: 1
+  "JUANITODIOSSALVADORDETODOSLOSPERUANOSABSOLUTOSE\xF1ORDELASMANOSBIENDIBUJADAS":
+    EnemyHP: 1
+    Enemy_Resistance: 0
+    Enemy_Damage: 1
+    Enemy_Spawn: {x: 0, y: 0}
+    Enemy_Speed: 1
+    Enemy_Type: 0
+    Enemy_Aceleration: 0.25
+    Enemy_DAceleration: 0.25
+    Enemy_LedgeCheckoofset: 0.1
+    Enemy_Status: 0
+    EnemyDetectionRange: 1
+    TimeBetweenAttacks: 1
