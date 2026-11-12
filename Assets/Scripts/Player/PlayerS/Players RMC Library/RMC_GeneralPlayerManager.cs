@@ -6,6 +6,7 @@ using RMC.SaveFile.SaveSerialice;
 using Unity.VectorGraphics;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.Events;
 ///<Recordatorios>
 /// Agregar los flac de las mejoras conforme se agreugen.
 namespace RMC.Player_Interaction.ThePlayerGeneralManager
@@ -13,6 +14,10 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
     [DefaultExecutionOrder(-7777777)]
     public class RMC_ThePlayerGeneralManager : MonoBehaviour
     {   
+        [Header ("Events,Pleass Ignore")]
+        public UnityEvent<bool> Activate_WallJump = new UnityEvent<bool>();
+
+        
 
         [Serializable]
         public class RMC_SaveFile_Information 
@@ -62,6 +67,7 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
         #region Awake 
         void Awake()
         {
+            Activate_WallJump.AddListener(_OnActivateWallJump);
             Amanager.enabled = false;
             AmManager.enabled = false;
             if (Pmanager._IsArkhalisActive == true && Pmanager._IsAriamisActive == false)
@@ -129,9 +135,17 @@ namespace RMC.Player_Interaction.ThePlayerGeneralManager
 
         }
 
+        static void _OnActivateWallJump(bool wallJump)
+        {
+            Game_Data_FromSave._WalljumpIsAllow = wallJump;
+        }
+
+
         #endregion
 
 
     }
 
 }
+
+

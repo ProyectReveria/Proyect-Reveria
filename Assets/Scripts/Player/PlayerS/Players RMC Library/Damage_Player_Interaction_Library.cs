@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace RMC.Player_Interaction.Damage_Interaction
@@ -31,6 +32,25 @@ namespace RMC.Player_Interaction.Damage_Interaction
                 StopCoroutine(FromLibrary_Dot_Iframes_Process);
             }
             FromLibrary_Dot_Iframes_Process = StartCoroutine(Iframes_WateTime(Iframes_Timer));
+        }
+
+        private float Iframe_OnDamageOverTimeEffect(bool IsActive, float damage,float Iframes)
+        {
+            float Damage_State = 1;
+            while (IsActive)
+            {
+                Damage_State += damage;
+                Damage_State = Mathf.Ceil(Damage_State);
+                StartCoroutine(Iframes_WateTime(Iframes));
+            }
+
+            return Damage_State;
+
+        }
+
+        public IEnumerator On_AnimacionIframes(float Animation_Duration)
+        {
+            yield return new WaitForSeconds(Animation_Duration);
         }
 
 

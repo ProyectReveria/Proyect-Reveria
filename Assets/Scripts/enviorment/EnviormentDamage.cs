@@ -15,11 +15,17 @@ public class EnviormentDamage : MonoBehaviour
     [SerializeField] private GameObject MagicCharacter; // Ariamis
     [SerializeField] private PlayerStats PlayerStats;
     [SerializeField] private PlayerManager Pmanager; 
+    [SerializeField] private RMC_ThePlayerGeneralManager Gmanager;
 
     #endregion
+
+    void Awake()
+    {
+        GameObject TheGeneralManager = GameObject.Find("WorldManager");
+        Gmanager = TheGeneralManager.GetComponent<RMC_ThePlayerGeneralManager>();
+    }
     void OnCollisionEnter2D(Collision2D hit)
     {
-        
 
         if (hit.gameObject == BloodCharacter && Pmanager._IsArkhalisActive || hit.gameObject == MagicCharacter && Pmanager._IsAriamisActive )
         {   
@@ -54,6 +60,16 @@ public class EnviormentDamage : MonoBehaviour
             MagicCharacter.transform.position = RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint;
             BloodManager.transform.position = RMC_ThePlayerGeneralManager.Game_Data_FromSave.SpawnPoint;
             Pmanager.PlayerCanMove = true;
+
+            if (Pmanager._IsAriamisActive)
+            {
+                Pmanager.Health_Ariamis(Gmanager.AriamisHPStatus_AfterUpgrades);
+            }
+
+            if (Pmanager._IsArkhalisActive)
+            {
+                Pmanager.Health_Arkhalis(Gmanager.ArkhalisHPStatus_AfterUpgrades);
+            }
         }
     }
 }

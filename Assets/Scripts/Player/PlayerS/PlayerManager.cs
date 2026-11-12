@@ -40,11 +40,20 @@ public class PlayerManager : MonoBehaviour , Reveria_Contract_Broker
         Ariamis_HPstatus = GManager.AriamisHPStatus_AfterUpgrades; 
     }
 
-    void HealthAllPlayers()
+    public void HealthAllPlayers()
     {
         Arkhalis_HPStatus = GManager.ArkhalisHPStatus_AfterUpgrades;
         Ariamis_HPstatus = GManager.AriamisHPStatus_AfterUpgrades; 
     }
 
+    public void Health_Arkhalis(float HP_Status)
+    {
+        Arkhalis_HPStatus = HP_Status;
+    }
+
+    public void Health_Ariamis(float HP_Status)
+    {
+        Ariamis_HPstatus = HP_Status;
+    }
     
 }

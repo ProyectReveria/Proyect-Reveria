@@ -578,4 +578,11 @@ public class SwitchCharactersLibrary : MonoBehaviour
     }
 
     #endregion
+
+
+    #region  Active_Or_desactivate Physics
+
+    
+
+    #endregion
 }
